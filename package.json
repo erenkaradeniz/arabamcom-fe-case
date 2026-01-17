@@ -20,9 +20,11 @@
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/vue-query": "^5.92.7",
     "axios": "^1.13.2",
+    "lucide-vue-next": "^0.562.0",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.1.18",
     "vue": "^3.5.26",
+    "vue-i18n": "^11.2.8",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
