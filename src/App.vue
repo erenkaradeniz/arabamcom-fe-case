@@ -1,21 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import { useDark, useToggle } from '@vueuse/core'
 import { Car, Sun, Moon, Languages } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 const { t, locale } = useI18n()
-const isDark = ref(false)
 
-const toggleTheme = () => {
-  isDark.value = !isDark.value
-  if (isDark.value) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-}
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 
 const toggleLanguage = () => {
   locale.value = locale.value === 'tr' ? 'en' : 'tr'
@@ -31,7 +24,7 @@ const headerActions = computed(() => [
   {
     icon: isDark.value ? Sun : Moon,
     title: isDark.value ? t('nav.light_mode') : t('nav.dark_mode'),
-    action: toggleTheme,
+    action: () => toggleDark(),
   },
 ])
 </script>

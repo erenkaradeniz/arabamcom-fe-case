@@ -1,31 +1,26 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { useAdvertListInfinite, useAdvertListPaged } from '@/composables/useAdverts'
+import { useUIStore, useFilterStore } from '@/stores'
 import AdvertCard from '@/components/advert/AdvertCard.vue'
 import AdvertListCard from '@/components/advert/AdvertListCard.vue'
 import AdvertFilter from '@/components/advert/AdvertFilter.vue'
 import AdvertHeader from '@/components/advert/AdvertHeader.vue'
 import AdvertControls from '@/components/advert/AdvertControls.vue'
-import { type AdvertQueryParams, SortType, SortDirection } from '@/types'
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const router = useRouter()
-const viewMode = ref<'grid' | 'list'>('grid')
-const paginationMode = ref<'scroll' | 'pagination'>('scroll')
-const currentPage = ref(1)
 
-const filters = ref<AdvertQueryParams>({
-  take: 20,
-  skip: 0,
-  sort: SortType.Date,
-  sortDirection: SortDirection.Descending,
-})
+const uiStore = useUIStore()
+const filterStore = useFilterStore()
 
-const selectedSort = ref('advert_date_desc')
-const isFilterModalOpen = ref(false)
+const { viewMode, paginationMode, isFilterModalOpen } = storeToRefs(uiStore)
+const { filters, selectedSort, currentPage, hasActiveFilters } = storeToRefs(filterStore)
+
 const loadMoreTrigger = ref<HTMLElement | null>(null)
 
 const isInfiniteEnabled = computed(() => paginationMode.value === 'scroll')
@@ -57,21 +52,17 @@ const error = computed(() => {
 })
 
 const handlePageChange = (direction: 'next' | 'prev') => {
-  const take = filters.value.take || 20
   if (direction === 'next') {
-    currentPage.value++
-    filters.value.skip = (currentPage.value - 1) * take
-  } else if (direction === 'prev' && currentPage.value > 1) {
-    currentPage.value--
-    filters.value.skip = (currentPage.value - 1) * take
+    filterStore.nextPage()
+  } else {
+    filterStore.prevPage()
   }
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-const togglePaginationMode = () => {
-  paginationMode.value = paginationMode.value === 'scroll' ? 'pagination' : 'scroll'
-  filters.value.skip = 0
-  currentPage.value = 1
+const handleTogglePaginationMode = () => {
+  uiStore.togglePaginationMode()
+  filterStore.resetPagination()
 }
 
 let observer: IntersectionObserver | null = null
@@ -121,9 +112,7 @@ const goToDetail = (id: number) => {
 }
 
 const handleTakeChange = (count: 20 | 50) => {
-  filters.value.take = count
-  filters.value.skip = 0
-  currentPage.value = 1
+  filterStore.setTake(count)
 }
 
 const handleSortChange = ({
@@ -135,11 +124,7 @@ const handleSortChange = ({
   sort: number
   direction: number
 }) => {
-  selectedSort.value = key
-  filters.value.sort = sort
-  filters.value.sortDirection = direction
-  filters.value.skip = 0
-  currentPage.value = 1
+  filterStore.setSort(key, sort, direction)
 }
 
 const handleApplyFilters = (newFilters: {
@@ -148,32 +133,13 @@ const handleApplyFilters = (newFilters: {
   minDate?: string
   maxDate?: string
 }) => {
-  filters.value.minYear = newFilters.minYear
-  filters.value.maxYear = newFilters.maxYear
-  filters.value.minDate = newFilters.minDate
-  filters.value.maxDate = newFilters.maxDate
-  filters.value.skip = 0
-  currentPage.value = 1
-  isFilterModalOpen.value = false
+  filterStore.applyFilters(newFilters)
+  uiStore.closeFilterModal()
 }
 
 const handleResetFilters = () => {
-  filters.value.minYear = undefined
-  filters.value.maxYear = undefined
-  filters.value.minDate = undefined
-  filters.value.maxDate = undefined
-  filters.value.skip = 0
-  currentPage.value = 1
+  filterStore.resetFilters()
 }
-
-const hasActiveFilters = computed(() => {
-  return (
-    filters.value.minYear !== undefined ||
-    filters.value.maxYear !== undefined ||
-    filters.value.minDate !== undefined ||
-    filters.value.maxDate !== undefined
-  )
-})
 </script>
 
 <template>
@@ -183,7 +149,7 @@ const hasActiveFilters = computed(() => {
         :is-loading="isLoading"
         :listing-count="currentAdverts.length"
         :pagination-mode="paginationMode"
-        @toggle-mode="togglePaginationMode"
+        @toggle-mode="handleTogglePaginationMode"
       />
 
       <AdvertControls
@@ -194,7 +160,7 @@ const hasActiveFilters = computed(() => {
         @update:take="handleTakeChange"
         @update:sort="handleSortChange"
         @update:view-mode="(mode) => (viewMode = mode)"
-        @open-filter="isFilterModalOpen = true"
+        @open-filter="uiStore.openFilterModal"
       />
     </div>
 
@@ -315,7 +281,7 @@ const hasActiveFilters = computed(() => {
       :initial-max-year="filters.maxYear"
       :initial-min-date="filters.minDate"
       :initial-max-date="filters.maxDate"
-      @close="isFilterModalOpen = false"
+      @close="uiStore.closeFilterModal"
       @apply="handleApplyFilters"
       @reset="handleResetFilters"
     />
