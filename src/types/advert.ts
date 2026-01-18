@@ -6,6 +6,8 @@ export interface AdvertQueryParams {
   categoryId?: number
   minYear?: number
   maxYear?: number
+  minDate?: string
+  maxDate?: string
 }
 
 export interface BaseAdvert {
@@ -52,3 +54,25 @@ export interface UserInfo {
   phone: string
   phoneFormatted: string
 }
+
+export enum SortType {
+  Price = 0,
+  Date = 1,
+  Year = 2,
+}
+
+export enum SortDirection {
+  Ascending = 0,
+  Descending = 1,
+}
+
+export const PhotoSizes = {
+  Thumbnail: '120x90',
+  Small: '160x120',
+  Medium: '240x180',
+  Large: '580x435',
+  ExtraLarge: '800x600',
+  Full: '1920x1080',
+} as const
+
+export type PhotoSizeType = (typeof PhotoSizes)[keyof typeof PhotoSizes]

@@ -1,5 +1,41 @@
 export default {
   common: {
-    hello: 'Hello',
+    premium: 'Premium',
+    detail: 'Detail',
+    error: 'An error occurred',
+    loading: 'Loading...',
+    next: 'Next',
+    prev: 'Previous',
+  },
+  nav: {
+    home: 'Home',
+    dark_mode: 'Dark Mode',
+    light_mode: 'Light Mode',
+    switch_language: 'Türkçeye Geç',
+  },
+  home: {
+    title: 'Showcase',
+    listing_count: '{count} listings',
+    loading_listings: 'Loading listings...',
+    filter: 'Filter',
+    clear: 'Clear',
+    apply: 'Apply',
+    year_min: 'Min Year',
+    year_max: 'Max Year',
+    model_year: 'Model Year',
+    advert_date: 'Advert Date',
+  },
+  sort: {
+    advert_date_desc: 'Advert Date (Newest)',
+    advert_date_asc: 'Advert Date (Oldest)',
+    price_asc: 'Price (Low to High)',
+    price_desc: 'Price (High to Low)',
+    model_year_desc: 'Model Year (Newest to Oldest)',
+    model_year_asc: 'Model Year (Oldest to Newest)',
+  },
+  detail: {
+    fullscreen: 'View Fullscreen',
+    not_found: 'Advert not found or an error occurred.',
+    loading: 'Loading details...',
   },
 }

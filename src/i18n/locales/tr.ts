@@ -1,5 +1,41 @@
 export default {
   common: {
-    hello: 'Merhaba',
+    premium: 'Premium',
+    detail: 'Detay',
+    error: 'Bir hata oluştu',
+    loading: 'Yükleniyor...',
+    next: 'Sonraki',
+    prev: 'Önceki',
+  },
+  nav: {
+    home: 'Ana Sayfa',
+    dark_mode: 'Koyu Tema',
+    light_mode: 'Açık Tema',
+    switch_language: 'Switch to English',
+  },
+  home: {
+    title: 'Vitrin',
+    listing_count: '{count} ilan listeleniyor',
+    loading_listings: 'İlanlar yükleniyor...',
+    filter: 'Filtrele',
+    clear: 'Temizle',
+    apply: 'Uygula',
+    year_min: 'Min Yıl',
+    year_max: 'Max Yıl',
+    model_year: 'Model Yılı',
+    advert_date: 'İlan Tarihi',
+  },
+  sort: {
+    advert_date_desc: 'İlan Tarihi (En Yeni)',
+    advert_date_asc: 'İlan Tarihi (En Eski)',
+    price_asc: 'Fiyat (Ucuzdan Pahalıya)',
+    price_desc: 'Fiyat (Pahalıdan Ucuza)',
+    model_year_desc: 'Model Yılı (Yeniden Eskiye)',
+    model_year_asc: 'Model Yılı (Eskiden Yeniye)',
+  },
+  detail: {
+    fullscreen: 'Tam Ekran Gör',
+    not_found: 'İlan bulunamadı veya bir hata oluştu.',
+    loading: 'Detaylar yükleniyor...',
   },
 }
