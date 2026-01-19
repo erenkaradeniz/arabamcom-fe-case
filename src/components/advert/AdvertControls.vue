@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { SlidersHorizontal, LayoutGrid, List } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
-import { SortType, SortDirection } from '@/types'
+import { SortDirection, SortType } from '@/types';
+import { LayoutGrid, List, SlidersHorizontal } from 'lucide-vue-next';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 defineProps<{
   take: number
@@ -21,18 +21,6 @@ const emit = defineEmits<{
 const { t } = useI18n()
 
 const sortOptions = computed(() => [
-  {
-    value: 'advert_date_desc',
-    label: t('sort.advert_date_desc'),
-    sort: SortType.Date,
-    direction: SortDirection.Descending,
-  },
-  {
-    value: 'advert_date_asc',
-    label: t('sort.advert_date_asc'),
-    sort: SortType.Date,
-    direction: SortDirection.Ascending,
-  },
   {
     value: 'price_asc',
     label: t('sort.price_asc'),
@@ -55,6 +43,18 @@ const sortOptions = computed(() => [
     value: 'model_year_asc',
     label: t('sort.model_year_asc'),
     sort: SortType.Year,
+    direction: SortDirection.Ascending,
+  },
+  {
+    value: 'advert_date_desc',
+    label: t('sort.advert_date_desc'),
+    sort: SortType.Date,
+    direction: SortDirection.Descending,
+  },
+  {
+    value: 'advert_date_asc',
+    label: t('sort.advert_date_asc'),
+    sort: SortType.Date,
     direction: SortDirection.Ascending,
   },
 ])

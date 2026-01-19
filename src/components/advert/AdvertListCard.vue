@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import SmartImage from '@/components/common/SmartImage.vue'
+import { useParallax } from '@/composables'
 import type { AdvertListItem } from '@/types'
 import { PhotoSizes } from '@/types'
-import { formatPrice, formatKm } from '@/utils/format'
-import { getAdvertImage } from '@/utils/image'
-import { useParallax } from '@/composables/useParallax'
-import { Calendar, Gauge, Palette, MapPin, ArrowRight } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
+import { formatKm } from '@/utils/format'
+import { ArrowRight, Calendar, Gauge, MapPin, Palette } from 'lucide-vue-next'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
@@ -48,16 +48,15 @@ const advertProperties = computed(() => {
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseLeave"
     >
-      <img
-        :src="getAdvertImage(advert.photo, PhotoSizes.Large)"
+      <SmartImage
+        :src="advert.photo"
         :alt="advert.title"
-        width="580"
-        height="435"
-        class="h-full w-full object-cover transition-transform duration-700"
-        :style="transformStyle"
-        :loading="isAboveFold ? 'eager' : 'lazy'"
-        :fetchpriority="isAboveFold ? 'high' : 'auto'"
-        decoding="async"
+        :preferred-size="PhotoSizes.Large"
+        :lazy="!isAboveFold"
+        :aspect-ratio="'16/10'"
+        image-class="transition-transform duration-700"
+        :image-style="transformStyle"
+        class="h-full w-full"
         :class="{ 'opacity-0': !advert.photo }"
       />
 
@@ -90,17 +89,19 @@ const advertProperties = computed(() => {
       </div>
 
       <div class="flex items-center gap-2 text-sm text-text-muted">
-        <MapPin :size="18" class="text-gray-400" />
-        <span>{{ advert.location.cityName }} / {{ advert.location.townName }}</span>
-        <span class="mx-1 text-gray-300">•</span>
-        <span class="whitespace-nowrap">{{ advert.dateFormatted }}</span>
+        <MapPin :size="18" class="text-gray-400 shrink-0" />
+        <span class="truncate"
+          >{{ advert.location.cityName }} / {{ advert.location.townName }}</span
+        >
+        <span class="mx-1 text-gray-300 shrink-0">•</span>
+        <span class="whitespace-nowrap shrink-0">{{ advert.dateFormatted }}</span>
       </div>
     </div>
 
     <div
       class="w-full md:w-[200px] p-4 md:p-6 flex flex-row md:flex-col justify-between items-center md:items-end md:justify-center gap-4"
     >
-      <p class="text-2xl font-extrabold text-primary">{{ formatPrice(advert.price) }}</p>
+      <p class="text-2xl font-extrabold text-primary">{{ advert.priceFormatted }}</p>
       <div
         class="flex items-center text-sm font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-xl group-hover:bg-primary group-hover:text-white transition-all"
       >
