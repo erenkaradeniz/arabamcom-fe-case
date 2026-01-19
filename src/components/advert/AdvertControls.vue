@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { SortDirection, SortType } from '@/types';
-import { LayoutGrid, List, SlidersHorizontal } from 'lucide-vue-next';
+import { LayoutGrid, List, Settings2, SlidersHorizontal } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-defineProps<{
+const props = defineProps<{
   take: number
   sortKey: string
   viewMode: 'grid' | 'list'
+  paginationMode: 'scroll' | 'pagination'
   hasActiveFilters: boolean
 }>()
 
@@ -15,6 +16,7 @@ const emit = defineEmits<{
   (e: 'update:take', value: 20 | 50): void
   (e: 'update:sort', value: { key: string; sort: number; direction: number }): void
   (e: 'update:viewMode', value: 'grid' | 'list'): void
+  (e: 'update:paginationMode', value: 'scroll' | 'pagination'): void
   (e: 'openFilter'): void
 }>()
 
@@ -59,6 +61,26 @@ const sortOptions = computed(() => [
   },
 ])
 
+const paginationOptions = computed(() => [
+  { value: '20-pagination', label: '20 ' + t('common.adverts') },
+  { value: '50-pagination', label: '50 ' + t('common.adverts') },
+  { value: '20-scroll', label: 'Infinite Scroll' },
+])
+
+const currentPaginationConfig = computed(() => {
+  return `${props.take}-${props.paginationMode}`
+})
+
+const handlePaginationChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement
+  const [takeStr, modeStr] = target.value.split('-')
+
+  if (takeStr && modeStr) {
+    emit('update:take', Number(takeStr) as 20 | 50)
+    emit('update:paginationMode', modeStr as 'scroll' | 'pagination')
+  }
+}
+
 const viewOptions = [
   { value: 'grid', icon: LayoutGrid },
   { value: 'list', icon: List },
@@ -74,16 +96,20 @@ const handleSort = (event: Event) => {
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-3">
-    <div class="toggle-group">
-      <button
-        v-for="value in [20, 50] as const"
-        :key="value"
-        @click="$emit('update:take', value)"
-        :class="take === value ? 'toggle-btn-active' : 'toggle-btn-inactive'"
+  <div class="flex flex-wrap items-center justify-end gap-3">
+    <div class="relative">
+      <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+        <Settings2 :size="16" />
+      </div>
+      <select
+        :value="currentPaginationConfig"
+        @change="handlePaginationChange"
+        class="select pl-9 pr-8"
       >
-        {{ value }}
-      </button>
+        <option v-for="option in paginationOptions" :key="option.value" :value="option.value">
+          {{ option.label }}
+        </option>
+      </select>
     </div>
 
     <select :value="sortKey" @change="handleSort" class="select">
@@ -109,7 +135,7 @@ const handleSort = (event: Event) => {
         :class="[
           'cursor-pointer rounded-md p-1.5 transition-colors',
           viewMode === option.value
-            ? 'bg-gray-100 text-text-main shadow-sm dark:bg-gray-700 dark:text-white'
+            ? 'bg-gray-100 text-text-main shadow-sm dark:bg-slate-700 dark:text-white'
             : 'text-gray-400 hover:text-text-main dark:hover:text-white',
         ]"
       >

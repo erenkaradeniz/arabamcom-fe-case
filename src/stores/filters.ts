@@ -1,9 +1,10 @@
-import { ref, computed } from 'vue'
+import { type AdvertQueryParams, SortDirection, SortType } from '@/types'
+import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { type AdvertQueryParams, SortType, SortDirection } from '@/types'
+import { computed, ref } from 'vue'
 
 export const useFilterStore = defineStore('filters', () => {
-  const filters = ref<AdvertQueryParams>({
+  const filters = useStorage<AdvertQueryParams>('advert-filters', {
     take: 20,
     skip: 0,
     sort: SortType.Date,

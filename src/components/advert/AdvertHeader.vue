@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { ListVideo, ListOrdered } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
 defineProps<{
   isLoading: boolean
   listingCount: number
-  paginationMode: 'scroll' | 'pagination'
-}>()
-
-defineEmits<{
-  (e: 'toggleMode'): void
 }>()
 
 const { t } = useI18n()
@@ -25,20 +19,6 @@ const { t } = useI18n()
         <span v-if="isLoading && !listingCount">{{ t('home.loading_listings') }}</span>
         <span v-else>{{ t('home.listing_count', { count: listingCount }) }}</span>
       </p>
-
-      <button
-        @click="$emit('toggleMode')"
-        class="hidden md:flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition cursor-pointer"
-        :title="
-          paginationMode === 'scroll'
-            ? 'Sayfalamaya Geç (Pagination)'
-            : 'Sonsuz Kaydırmaya Geç (Infinite Scroll)'
-        "
-      >
-        <ListVideo v-if="paginationMode === 'scroll'" :size="14" />
-        <ListOrdered v-else :size="14" />
-        <span>{{ paginationMode === 'scroll' ? 'Infinite Scroll' : 'Pagination' }}</span>
-      </button>
     </div>
   </div>
 </template>

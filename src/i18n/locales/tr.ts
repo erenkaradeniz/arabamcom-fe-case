@@ -6,6 +6,7 @@ export default {
     loading: 'Yükleniyor...',
     next: 'Sonraki',
     prev: 'Önceki',
+    adverts: 'İlan',
   },
   nav: {
     home: 'Ana Sayfa',

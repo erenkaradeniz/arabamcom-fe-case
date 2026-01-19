@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, watch, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
-import { useAdvertListInfinite, useAdvertListPaged } from '@/composables/useAdverts'
-import { useUIStore, useFilterStore } from '@/stores'
 import AdvertCard from '@/components/advert/AdvertCard.vue'
-import AdvertListCard from '@/components/advert/AdvertListCard.vue'
+import AdvertControls from '@/components/advert/AdvertControls.vue'
 import AdvertFilter from '@/components/advert/AdvertFilter.vue'
 import AdvertHeader from '@/components/advert/AdvertHeader.vue'
-import AdvertControls from '@/components/advert/AdvertControls.vue'
-import { Loader2, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import AdvertListCard from '@/components/advert/AdvertListCard.vue'
+import { useAdvertListInfinite, useAdvertListPaged } from '@/composables/useAdverts'
+import { useFilterStore, useUIStore } from '@/stores'
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -60,11 +60,6 @@ const handlePageChange = (direction: 'next' | 'prev') => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-const handleTogglePaginationMode = () => {
-  uiStore.togglePaginationMode()
-  filterStore.resetPagination()
-}
-
 let observer: IntersectionObserver | null = null
 
 const setupObserver = () => {
@@ -111,8 +106,20 @@ const goToDetail = (id: number) => {
   router.push({ name: 'advert-detail', params: { id } })
 }
 
+const scrollToTop = () => {
+  if (observer) observer.disconnect()
+  window.scrollTo({ top: 0, behavior: 'auto' })
+
+  if (paginationMode.value === 'scroll') {
+    setTimeout(() => {
+      setupObserver()
+    }, 100)
+  }
+}
+
 const handleTakeChange = (count: 20 | 50) => {
   filterStore.setTake(count)
+  scrollToTop()
 }
 
 const handleSortChange = ({
@@ -125,6 +132,7 @@ const handleSortChange = ({
   direction: number
 }) => {
   filterStore.setSort(key, sort, direction)
+  scrollToTop()
 }
 
 const handleApplyFilters = (newFilters: {
@@ -135,66 +143,45 @@ const handleApplyFilters = (newFilters: {
 }) => {
   filterStore.applyFilters(newFilters)
   uiStore.closeFilterModal()
+  scrollToTop()
 }
 
 const handleResetFilters = () => {
   filterStore.resetFilters()
+  scrollToTop()
+}
+
+const handlePaginationModeChange = (mode: 'scroll' | 'pagination') => {
+  uiStore.setPaginationMode(mode)
+  scrollToTop()
 }
 </script>
 
 <template>
   <div>
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-      <AdvertHeader
-        :is-loading="isLoading"
-        :listing-count="currentAdverts.length"
-        :pagination-mode="paginationMode"
-        @toggle-mode="handleTogglePaginationMode"
-      />
+    <AdvertHeader
+      class="mb-6"
+      :is-loading="isLoading"
+      :listing-count="currentAdverts.length"
+    />
 
+    <div class="sticky top-20 z-40 mb-8 rounded-2xl bg-white/80 p-3 shadow-soft backdrop-blur-md transition-all dark:bg-slate-900/80 border border-gray-100 dark:border-slate-800">
       <AdvertControls
         :take="filters.take || 20"
         :sort-key="selectedSort"
         :view-mode="viewMode"
+        :pagination-mode="paginationMode"
         :has-active-filters="hasActiveFilters"
         @update:take="handleTakeChange"
         @update:sort="handleSortChange"
         @update:view-mode="(mode) => (viewMode = mode)"
+        @update:pagination-mode="handlePaginationModeChange"
         @open-filter="uiStore.openFilterModal"
       />
     </div>
 
     <div v-if="isError" class="bg-red-50 text-red-600 p-4 rounded-xl border border-red-200">
       {{ error?.message || t('common.error') }}
-    </div>
-
-    <div
-      v-if="paginationMode === 'pagination' && currentAdverts.length > 0"
-      class="flex justify-end items-center gap-4 mb-4"
-    >
-      <div class="flex items-center gap-2">
-        <button
-          @click="handlePageChange('prev')"
-          :disabled="currentPage === 1"
-          class="p-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main dark:text-white"
-          :title="t('common.prev')"
-        >
-          <ChevronLeft :size="20" />
-        </button>
-
-        <span class="font-bold text-sm text-primary min-w-[3ch] text-center">{{
-          currentPage
-        }}</span>
-
-        <button
-          @click="handlePageChange('next')"
-          :disabled="currentAdverts.length < (filters.take || 20)"
-          class="p-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main dark:text-white"
-          :title="t('common.next')"
-        >
-          <ChevronRight :size="20" />
-        </button>
-      </div>
     </div>
 
     <div

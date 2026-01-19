@@ -1,9 +1,10 @@
-import { ref } from 'vue'
+import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useUIStore = defineStore('ui', () => {
-  const viewMode = ref<'grid' | 'list'>('grid')
-  const paginationMode = ref<'scroll' | 'pagination'>('scroll')
+  const viewMode = useStorage<'grid' | 'list'>('ui-view-mode', 'grid')
+  const paginationMode = useStorage<'scroll' | 'pagination'>('ui-pagination-mode', 'scroll')
 
   const isFilterModalOpen = ref(false)
 
@@ -13,6 +14,10 @@ export const useUIStore = defineStore('ui', () => {
 
   const togglePaginationMode = () => {
     paginationMode.value = paginationMode.value === 'scroll' ? 'pagination' : 'scroll'
+  }
+
+  const setPaginationMode = (mode: 'scroll' | 'pagination') => {
+    paginationMode.value = mode
   }
 
   const openFilterModal = () => {
@@ -29,6 +34,7 @@ export const useUIStore = defineStore('ui', () => {
     isFilterModalOpen,
     toggleViewMode,
     togglePaginationMode,
+    setPaginationMode,
     openFilterModal,
     closeFilterModal,
   }

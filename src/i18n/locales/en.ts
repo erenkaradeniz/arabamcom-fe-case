@@ -6,6 +6,7 @@ export default {
     loading: 'Loading...',
     next: 'Next',
     prev: 'Previous',
+    adverts: 'Ads',
   },
   nav: {
     home: 'Home',
