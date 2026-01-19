@@ -21,6 +21,10 @@ export default {
     clear: 'Temizle',
     apply: 'Uygula',
     date: 'Tarih',
+    year: 'Yıl',
+    all: 'Tümü',
+    category: 'Kategori',
+    category_id: 'Kategori ID',
   },
   sort: {
     advert_date_desc: 'Tarih - Yeniden Eskiye',

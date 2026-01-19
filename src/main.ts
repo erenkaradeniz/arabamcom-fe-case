@@ -1,6 +1,7 @@
 import { useGlobalError } from '@/composables/useGlobalError'
 import i18n from '@/i18n'
 import { VueQueryPlugin } from '@tanstack/vue-query'
+import '@vuepic/vue-datepicker/dist/main.css'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import './assets/main.css'

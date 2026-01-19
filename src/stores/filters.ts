@@ -20,7 +20,8 @@ export const useFilterStore = defineStore('filters', () => {
       filters.value.minYear !== undefined ||
       filters.value.maxYear !== undefined ||
       filters.value.minDate !== undefined ||
-      filters.value.maxDate !== undefined
+      filters.value.maxDate !== undefined ||
+      filters.value.categoryId !== undefined
     )
   })
 
@@ -41,11 +42,13 @@ export const useFilterStore = defineStore('filters', () => {
     maxYear?: number
     minDate?: string
     maxDate?: string
+    categoryId?: number | string
   }) => {
     filters.value.minYear = newFilters.minYear
     filters.value.maxYear = newFilters.maxYear
     filters.value.minDate = newFilters.minDate
     filters.value.maxDate = newFilters.maxDate
+    filters.value.categoryId = newFilters.categoryId ? Number(newFilters.categoryId) : undefined
     resetPagination()
   }
 
@@ -54,6 +57,7 @@ export const useFilterStore = defineStore('filters', () => {
     filters.value.maxYear = undefined
     filters.value.minDate = undefined
     filters.value.maxDate = undefined
+    filters.value.categoryId = undefined
     resetPagination()
   }
 

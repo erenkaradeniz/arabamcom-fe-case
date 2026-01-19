@@ -35,6 +35,7 @@
     maxYear: filters.value.maxYear,
     minDate: filters.value.minDate,
     maxDate: filters.value.maxDate,
+    categoryId: filters.value.categoryId,
   })
 
   watch(
@@ -44,6 +45,7 @@
       sidebarFilters.maxYear = newVal.maxYear
       sidebarFilters.minDate = newVal.minDate
       sidebarFilters.maxDate = newVal.maxDate
+      sidebarFilters.categoryId = newVal.categoryId
     },
     { deep: true }
   )
@@ -54,6 +56,7 @@
       maxYear: sidebarFilters.maxYear ? Number(sidebarFilters.maxYear) : undefined,
       minDate: sidebarFilters.minDate || undefined,
       maxDate: sidebarFilters.maxDate || undefined,
+      categoryId: sidebarFilters.categoryId || undefined,
     })
   }
 
@@ -178,6 +181,7 @@
     maxYear?: number
     minDate?: string
     maxDate?: string
+    categoryId?: number | string
   }) => {
     filterStore.applyFilters(newFilters)
     uiStore.closeFilterModal()
@@ -250,6 +254,7 @@
             v-model:max-year="sidebarFilters.maxYear"
             v-model:min-date="sidebarFilters.minDate"
             v-model:max-date="sidebarFilters.maxDate"
+            v-model:category-id="sidebarFilters.categoryId"
             class="mb-6" />
 
           <button @click="handleSidebarApply" class="btn-primary w-full">
@@ -329,6 +334,7 @@
       :initial-max-year="filters.maxYear"
       :initial-min-date="filters.minDate"
       :initial-max-date="filters.maxDate"
+      :initial-category-id="filters.categoryId"
       @close="uiStore.closeFilterModal"
       @apply="handleApplyFilters"
       @reset="handleResetFilters" />

@@ -20,8 +20,10 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/vue-query": "^5.92.7",
+    "@vuepic/vue-datepicker": "^12.1.0",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.13.2",
+    "date-fns": "^4.1.0",
     "lucide-vue-next": "^0.562.0",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.1.18",

@@ -21,6 +21,10 @@ export default {
     clear: 'Clear',
     apply: 'Apply',
     date: 'Date',
+    year: 'Year',
+    all: 'All',
+    category: 'Category',
+    category_id: 'Category ID',
   },
   sort: {
     advert_date_desc: 'Date - Newest to Oldest',

@@ -290,12 +290,12 @@
           @click.self="closeLightbox">
           <button
             @click="closeLightbox"
-            class="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-colors hover:bg-white/20">
+            class="absolute top-4 right-4 z-50 rounded-full bg-white/10 p-3 text-white backdrop-blur transition-colors hover:bg-white/20">
             <X :size="24" />
           </button>
 
           <div
-            class="absolute top-4 left-4 z-10 flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white backdrop-blur">
+            class="absolute top-4 left-4 z-50 flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white backdrop-blur">
             <Camera :size="16" />
             {{ activePhotoIndex + 1 }} / {{ totalPhotos }}
           </div>
@@ -369,7 +369,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 10;
+    z-index: 50;
     display: flex;
     align-items: center;
     justify-content: center;
