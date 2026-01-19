@@ -82,14 +82,14 @@ const { goBack, returnToHome } = useAppNavigation()
 <template>
   <div>
     <div v-if="isLoading" class="flex flex-col gap-8">
-      <div class="skeleton h-8 w-48"></div>
+      <BaseSkeleton width="12rem" height="2rem" />
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div class="flex flex-col gap-6 lg:col-span-8">
-          <div class="skeleton h-[400px]"></div>
-          <div class="skeleton h-[300px]"></div>
+          <BaseSkeleton height="25rem" />
+          <BaseSkeleton height="18.75rem" />
         </div>
         <div class="lg:col-span-4">
-          <div class="skeleton h-[400px]"></div>
+          <BaseSkeleton height="25rem" />
         </div>
       </div>
     </div>

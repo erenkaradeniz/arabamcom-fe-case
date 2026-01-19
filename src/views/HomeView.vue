@@ -189,11 +189,11 @@ const handlePaginationModeChange = (mode: 'scroll' | 'pagination') => {
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12"
     >
       <template v-if="isLoading && !currentAdverts.length">
-        <div
+        <BaseSkeleton
           v-for="n in 8"
           :key="n"
-          class="bg-gray-200 dark:bg-gray-800 rounded-xl h-[350px] animate-pulse"
-        ></div>
+          height="22rem"
+        />
       </template>
 
       <AdvertCard
@@ -207,11 +207,11 @@ const handlePaginationModeChange = (mode: 'scroll' | 'pagination') => {
 
     <div v-else class="flex flex-col gap-4 pb-12">
       <template v-if="isLoading && !currentAdverts.length">
-        <div
+        <BaseSkeleton
           v-for="n in 5"
           :key="n"
-          class="bg-gray-200 dark:bg-gray-800 rounded-xl h-[180px] animate-pulse"
-        ></div>
+          height="12.5rem"
+        />
       </template>
 
       <AdvertListCard

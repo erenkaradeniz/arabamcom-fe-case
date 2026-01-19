@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import { useDark, useToggle } from '@vueuse/core'
-import { Car, Sun, Moon, Languages } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
+import { Car, Languages, Moon, Sun } from 'lucide-vue-next'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { RouterLink, RouterView } from 'vue-router'
 
 const { t, locale } = useI18n()
 
