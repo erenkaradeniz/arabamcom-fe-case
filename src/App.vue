@@ -31,16 +31,14 @@ const headerActions = computed(() => [
 
 <template>
   <div
-    class="min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-300"
+    class="min-h-screen bg-background-light transition-colors duration-300 dark:bg-background-dark"
   >
-    <header
-      class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm"
-    >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
+    <header class="header">
+      <div class="container-main">
+        <div class="flex h-16 items-center justify-between">
           <RouterLink
             to="/"
-            class="flex items-center gap-2 text-2xl font-extrabold text-primary hover:opacity-80 transition-opacity duration-200"
+            class="flex items-center gap-2 text-2xl font-extrabold text-primary transition-opacity duration-200 hover:opacity-80"
           >
             <Car :size="32" stroke-width="2" />
             arabam<span class="text-text-main dark:text-white">.com</span>
@@ -51,7 +49,7 @@ const headerActions = computed(() => [
               v-for="action in headerActions"
               :key="action.title"
               @click="action.action"
-              class="p-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 flex items-center gap-1 font-bold text-xs cursor-pointer"
+              class="btn-icon flex items-center gap-1 text-xs font-bold text-text-muted hover:text-text-main"
               :title="action.title"
             >
               <component :is="action.icon" :size="20" />
@@ -62,12 +60,12 @@ const headerActions = computed(() => [
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="container-main py-8">
       <RouterView />
     </main>
 
-    <footer class="border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6"></div>
+    <footer class="footer">
+      <div class="container-main py-6"></div>
     </footer>
   </div>
 </template>

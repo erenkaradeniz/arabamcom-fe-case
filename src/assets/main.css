@@ -18,3 +18,93 @@
   --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
   --shadow-lift: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 font-medium text-white shadow-md transition-colors hover:bg-red-700;
+  }
+
+  .btn-secondary {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 px-4 py-3 font-medium transition-colors hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800;
+  }
+
+  .btn-icon {
+    @apply cursor-pointer rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
+
+  .card {
+    @apply overflow-hidden rounded-xl bg-card-light shadow-soft transition-all duration-300 dark:bg-[#1e1e1e];
+  }
+
+  .card-interactive {
+    @apply cursor-pointer overflow-hidden rounded-xl border border-transparent bg-card-light shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-gray-100 hover:shadow-lift dark:bg-[#1e1e1e] dark:hover:border-gray-700;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 dark:border-gray-700 dark:bg-gray-800;
+  }
+
+  .select {
+    @apply cursor-pointer rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 dark:border-gray-700 dark:bg-gray-800;
+  }
+
+  .container-main {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .toggle-group {
+    @apply flex overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800;
+  }
+
+  .toggle-btn-active {
+    @apply cursor-pointer bg-primary px-4 py-2 text-sm font-medium text-white transition-colors;
+  }
+
+  .toggle-btn-inactive {
+    @apply cursor-pointer px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-1 text-xs font-medium dark:bg-gray-800;
+  }
+
+  .badge-premium {
+    @apply absolute left-3 top-3 rounded-md bg-white/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-800 shadow-sm backdrop-blur-sm dark:bg-black/80 dark:text-gray-200;
+  }
+
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center;
+  }
+
+  .modal-backdrop {
+    @apply absolute inset-0 bg-black/50 backdrop-blur-sm;
+  }
+
+  .modal-content {
+    @apply relative mx-4 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-900;
+  }
+
+  .header {
+    @apply sticky top-0 z-50 border-b border-gray-100 bg-white/95 shadow-sm backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/95;
+  }
+
+  .pagination-btn {
+    @apply flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 font-medium transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-gray-800;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-xl bg-gray-200 dark:bg-gray-800;
+  }
+
+  .text-heading {
+    @apply font-bold text-text-main dark:text-white;
+  }
+
+  .text-muted {
+    @apply text-sm text-text-muted;
+  }
+
+  .footer {
+    @apply mt-auto border-t border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900;
+  }
+}

@@ -75,57 +75,41 @@ const handleSort = (event: Event) => {
 
 <template>
   <div class="flex flex-wrap items-center gap-3">
-    <div
-      class="flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
-    >
+    <div class="toggle-group">
       <button
         v-for="value in [20, 50] as const"
         :key="value"
         @click="$emit('update:take', value)"
-        :class="[
-          'px-4 py-2 text-sm font-medium transition-colors cursor-pointer',
-          take === value
-            ? 'bg-primary text-white'
-            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
-        ]"
+        :class="take === value ? 'toggle-btn-active' : 'toggle-btn-inactive'"
       >
         {{ value }}
       </button>
     </div>
 
-    <select
-      :value="sortKey"
-      @change="handleSort"
-      class="px-4 py-2 text-sm font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
-    >
+    <select :value="sortKey" @change="handleSort" class="select">
       <option v-for="option in sortOptions" :key="option.value" :value="option.value">
         {{ option.label }}
       </option>
     </select>
 
-    <button
-      @click="$emit('openFilter')"
-      class="relative flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:bg-red-700 transition cursor-pointer"
-    >
+    <button @click="$emit('openFilter')" class="btn-primary relative">
       <SlidersHorizontal :size="18" />
       {{ t('home.filter') }}
       <span
         v-if="hasActiveFilters"
-        class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"
+        class="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-green-500"
       ></span>
     </button>
 
-    <div
-      class="flex bg-white dark:bg-gray-800 p-1 rounded-lg border border-gray-200 dark:border-gray-700"
-    >
+    <div class="toggle-group p-1">
       <button
         v-for="option in viewOptions"
         :key="option.value"
         @click="$emit('update:viewMode', option.value)"
         :class="[
-          'p-1.5 rounded-md transition-colors cursor-pointer',
+          'cursor-pointer rounded-md p-1.5 transition-colors',
           viewMode === option.value
-            ? 'bg-gray-100 dark:bg-gray-700 text-text-main dark:text-white shadow-sm'
+            ? 'bg-gray-100 text-text-main shadow-sm dark:bg-gray-700 dark:text-white'
             : 'text-gray-400 hover:text-text-main dark:hover:text-white',
         ]"
       >

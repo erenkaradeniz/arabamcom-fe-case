@@ -39,9 +39,7 @@ const advertProperties = computed(() => {
 </script>
 
 <template>
-  <div
-    class="group relative flex flex-col overflow-hidden rounded-xl bg-card-light dark:bg-[#1e1e1e] shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift cursor-pointer border border-transparent hover:border-gray-100 dark:hover:border-gray-700 h-full"
-  >
+  <div class="card-interactive group relative flex h-full flex-col">
     <div
       class="relative w-full overflow-hidden bg-gray-200"
       style="aspect-ratio: 4/3"
@@ -60,33 +58,26 @@ const advertProperties = computed(() => {
         decoding="async"
       />
 
-      <div
-        v-if="advert.price > 2000000"
-        class="absolute top-3 left-3 bg-white/90 dark:bg-black/80 backdrop-blur-sm px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 shadow-sm"
-      >
+      <div v-if="advert.price > 2000000" class="badge-premium">
         {{ t('common.premium') }}
       </div>
     </div>
 
     <div class="flex flex-1 flex-col p-4 md:p-5">
       <h3
-        class="text-base md:text-lg font-bold text-text-main dark:text-white line-clamp-1 mb-2 group-hover:text-primary transition-colors"
+        class="text-heading mb-2 line-clamp-1 text-base transition-colors group-hover:text-primary md:text-lg"
       >
         {{ advert.title }}
       </h3>
 
-      <div class="flex flex-wrap items-center gap-1.5 mb-3 text-xs font-medium text-text-muted">
-        <span
-          v-for="prop in advertProperties"
-          :key="prop.label"
-          class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded"
-        >
+      <div class="mb-3 flex flex-wrap items-center gap-1.5">
+        <span v-for="prop in advertProperties" :key="prop.label" class="tag">
           <component :is="prop.icon" :size="14" />
           {{ prop.value }}
         </span>
       </div>
 
-      <div class="flex items-center gap-1 text-xs text-text-muted mb-4">
+      <div class="text-muted mb-4 flex items-center gap-1">
         <MapPin :size="16" class="text-gray-400" />
         <span>{{ advert.location.cityName }}, {{ advert.location.townName }}</span>
         <span class="mx-1 text-gray-300">•</span>
@@ -94,16 +85,16 @@ const advertProperties = computed(() => {
       </div>
 
       <div
-        class="mt-auto flex items-end justify-between border-t border-gray-100 dark:border-gray-800 pt-4"
+        class="mt-auto flex items-end justify-between border-t border-gray-100 pt-4 dark:border-gray-800"
       >
         <p class="text-xl font-bold text-primary">
           {{ formatPrice(advert.price) }}
         </p>
         <div
-          class="flex items-center text-xs font-semibold text-gray-400 group-hover:text-text-main transition-colors"
+          class="flex items-center text-xs font-semibold text-gray-400 transition-colors group-hover:text-text-main"
         >
           {{ t('common.detail') }}
-          <ArrowRight :size="16" class="ml-0.5 group-hover:translate-x-0.5 transition-transform" />
+          <ArrowRight :size="16" class="ml-0.5 transition-transform group-hover:translate-x-0.5" />
         </div>
       </div>
     </div>
