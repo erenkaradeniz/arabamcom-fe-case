@@ -184,3 +184,22 @@ button {
     @apply flex items-center gap-2 text-gray-700 dark:text-gray-300;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .card-interactive:hover,
+  .card-interactive:focus {
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+  }
+}
+

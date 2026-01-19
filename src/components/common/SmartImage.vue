@@ -263,4 +263,11 @@
   .dark .smart-image-error-inner {
     color: #6b7280;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .smart-image {
+      transform: none !important;
+      transition: none !important;
+    }
+  }
 </style>

@@ -1,10 +1,32 @@
-import { ref } from 'vue'
+import { useMediaQuery } from '@vueuse/core'
+import { ref, watch } from 'vue'
 
 export function useParallax() {
   const transformStyle = ref({})
+  const isReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   let rafId: number | null = null
 
+  watch(
+    isReducedMotion,
+    (val) => {
+      if (val) {
+        if (rafId) {
+          window.cancelAnimationFrame(rafId)
+          rafId = null
+        }
+        transformStyle.value = {
+          transform: 'scale(1)',
+          transition: 'transform 0s',
+        }
+      } else {
+        rafId = null
+      }
+    },
+    { immediate: true }
+  )
+
   const handleMouseMove = (e: MouseEvent) => {
+    if (isReducedMotion.value) return
     const target = e.currentTarget as HTMLElement
     const { left, top, width, height } = target.getBoundingClientRect()
     const { clientX, clientY } = e
