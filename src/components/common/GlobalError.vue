@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import { useGlobalError } from '@/composables/useGlobalError'
-import { AlertTriangle, Home, RefreshCw } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
+  import { useGlobalError } from '@/composables/useGlobalError'
+  import { AlertTriangle, Home, RefreshCw } from 'lucide-vue-next'
+  import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
-const { error, clearError } = useGlobalError()
+  const { t } = useI18n()
+  const { error, clearError } = useGlobalError()
 
-const handleReload = () => {
-  window.location.reload()
-}
+  const handleReload = () => {
+    window.location.reload()
+  }
 
-const handleGoHome = () => {
-  clearError()
-  window.location.href = '/'
-}
+  const handleGoHome = () => {
+    clearError()
+    window.location.href = '/'
+  }
 </script>
 
 <template>
-  <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-50 p-4 dark:bg-slate-900">
+  <div
+    class="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-50 p-4 dark:bg-slate-900">
     <div class="w-full max-w-md text-center">
       <div class="mb-6 flex justify-center">
         <div class="rounded-full bg-red-100 p-4 dark:bg-red-900/30">
@@ -43,7 +44,9 @@ const handleGoHome = () => {
         </button>
       </div>
 
-      <div v-if="error" class="mt-8 overflow-hidden rounded-lg bg-gray-100 text-left dark:bg-slate-800">
+      <div
+        v-if="error"
+        class="mt-8 overflow-hidden rounded-lg bg-gray-100 text-left dark:bg-slate-800">
         <details class="group">
           <summary
             class="cursor-pointer p-4 font-mono text-xs font-bold text-gray-500 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-slate-700">

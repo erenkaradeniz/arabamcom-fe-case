@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import SmartImage from '@/components/common/SmartImage.vue'
-import { useParallax } from '@/composables'
-import { type AdvertListItem, PhotoSizes } from '@/types'
-import { formatKm } from '@/utils/format'
-import { ArrowRight, Calendar, Gauge, MapPin, Palette } from 'lucide-vue-next'
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
+  import SmartImage from '@/components/common/SmartImage.vue'
+  import { useParallax } from '@/composables'
+  import { type AdvertListItem, PhotoSizes } from '@/types'
+  import { formatKm } from '@/utils/format'
+  import { ArrowRight, Calendar, Gauge, MapPin, Palette } from 'lucide-vue-next'
+  import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-const props = defineProps<{
-  advert: AdvertListItem
-  index?: number
-}>()
+  const props = defineProps<{
+    advert: AdvertListItem
+    index?: number
+  }>()
 
-const getProperty = (name: string) => {
-  return props.advert.properties?.find((p) => p.name === name)?.value
-}
+  const getProperty = (name: string) => {
+    return props.advert.properties?.find((p) => p.name === name)?.value
+  }
 
-const isAboveFold = (props.index ?? 0) < 4
+  const isAboveFold = (props.index ?? 0) < 4
 
-const { transformStyle, handleMouseMove, handleMouseLeave } = useParallax()
+  const { transformStyle, handleMouseMove, handleMouseLeave } = useParallax()
 
-const advertProperties = computed(() => {
-  const props = []
-  const year = getProperty('year')
-  if (year) props.push({ label: 'year', value: year, icon: Calendar })
+  const advertProperties = computed(() => {
+    const props = []
+    const year = getProperty('year')
+    if (year) props.push({ label: 'year', value: year, icon: Calendar })
 
-  const km = getProperty('km')
-  if (km) props.push({ label: 'km', value: formatKm(km), icon: Gauge })
+    const km = getProperty('km')
+    if (km) props.push({ label: 'km', value: formatKm(km), icon: Gauge })
 
-  const color = getProperty('color')
-  if (color) props.push({ label: 'color', value: color, icon: Palette })
+    const color = getProperty('color')
+    if (color) props.push({ label: 'color', value: color, icon: Palette })
 
-  return props
-})
+    return props
+  })
 </script>
 
 <template>
@@ -43,8 +43,7 @@ const advertProperties = computed(() => {
       class="relative w-full overflow-hidden bg-gray-200"
       style="aspect-ratio: 4/3"
       @mousemove="handleMouseMove"
-      @mouseleave="handleMouseLeave"
-    >
+      @mouseleave="handleMouseLeave">
       <SmartImage
         :src="advert.photo"
         :alt="advert.title"
@@ -53,8 +52,7 @@ const advertProperties = computed(() => {
         :aspect-ratio="'4/3'"
         image-class="transition-transform duration-700"
         :image-style="transformStyle"
-        class="h-full w-full"
-      />
+        class="h-full w-full" />
 
       <div v-if="advert.price > 2000000" class="badge-premium">
         {{ t('common.premium') }}
@@ -63,8 +61,7 @@ const advertProperties = computed(() => {
 
     <div class="flex flex-1 flex-col p-4 md:p-5">
       <h3
-        class="text-heading mb-2 line-clamp-1 text-base transition-colors group-hover:text-primary md:text-lg"
-      >
+        class="text-heading group-hover:text-primary mb-2 line-clamp-1 text-base transition-colors md:text-lg">
         {{ advert.title }}
       </h3>
 
@@ -75,27 +72,25 @@ const advertProperties = computed(() => {
         </span>
       </div>
 
-      <div class="text-muted mt-auto mb-4 flex w-full justify-between items-center gap-2">
-        <div class="flex items-center gap-1 min-w-0">
-          <MapPin :size="16" class="text-gray-400 shrink-0" />
+      <div class="text-muted mt-auto mb-4 flex w-full items-center justify-between gap-2">
+        <div class="flex min-w-0 items-center gap-1">
+          <MapPin :size="16" class="shrink-0 text-gray-400" />
           <span class="truncate"
             >{{ advert.location.cityName }}, {{ advert.location.townName }}</span
           >
         </div>
-        <span class="whitespace-nowrap shrink-0 text-xs text-gray-400">{{
+        <span class="shrink-0 text-xs whitespace-nowrap text-gray-400">{{
           advert.dateFormatted
         }}</span>
       </div>
 
       <div
-        class="flex items-end justify-between border-t border-gray-100 pt-4 dark:border-gray-800"
-      >
-        <p class="text-xl font-bold text-primary">
+        class="flex items-end justify-between border-t border-gray-100 pt-4 dark:border-gray-800">
+        <p class="text-primary text-xl font-bold">
           {{ advert.priceFormatted }}
         </p>
         <div
-          class="flex items-center text-xs font-semibold text-gray-400 transition-colors group-hover:text-text-main"
-        >
+          class="group-hover:text-text-main flex items-center text-xs font-semibold text-gray-400 transition-colors">
           {{ t('common.detail') }}
           <ArrowRight :size="16" class="ml-0.5 transition-transform group-hover:translate-x-0.5" />
         </div>

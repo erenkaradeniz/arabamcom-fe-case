@@ -1,78 +1,78 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { X } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
+  import { ref, computed, watch } from 'vue'
+  import { X } from 'lucide-vue-next'
+  import { useI18n } from 'vue-i18n'
 
-const props = defineProps<{
-  isOpen: boolean
-  initialMinYear?: number
-  initialMaxYear?: number
-  initialMinDate?: string
-  initialMaxDate?: string
-}>()
+  const props = defineProps<{
+    isOpen: boolean
+    initialMinYear?: number
+    initialMaxYear?: number
+    initialMinDate?: string
+    initialMaxDate?: string
+  }>()
 
-const emit = defineEmits<{
-  (e: 'close'): void
-  (
-    e: 'apply',
-    filters: {
-      minYear?: number
-      maxYear?: number
-      minDate?: string
-      maxDate?: string
-    },
-  ): void
-  (e: 'reset'): void
-}>()
+  const emit = defineEmits<{
+    (e: 'close'): void
+    (
+      e: 'apply',
+      filters: {
+        minYear?: number
+        maxYear?: number
+        minDate?: string
+        maxDate?: string
+      }
+    ): void
+    (e: 'reset'): void
+  }>()
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-const minYear = ref<string | number>('')
-const maxYear = ref<string | number>('')
-const minDate = ref<string>('')
-const maxDate = ref<string>('')
+  const minYear = ref<string | number>('')
+  const maxYear = ref<string | number>('')
+  const minDate = ref<string>('')
+  const maxDate = ref<string>('')
 
-const currentYear = new Date().getFullYear()
-const yearOptions = Array.from({ length: 30 }, (_, i) => currentYear - i)
+  const currentYear = new Date().getFullYear()
+  const yearOptions = Array.from({ length: 30 }, (_, i) => currentYear - i)
 
-watch(
-  () => props.isOpen,
-  (newVal) => {
-    if (newVal) {
-      minYear.value = props.initialMinYear || ''
-      maxYear.value = props.initialMaxYear || ''
-      minDate.value = props.initialMinDate || ''
-      maxDate.value = props.initialMaxDate || ''
+  watch(
+    () => props.isOpen,
+    (newVal) => {
+      if (newVal) {
+        minYear.value = props.initialMinYear || ''
+        maxYear.value = props.initialMaxYear || ''
+        minDate.value = props.initialMinDate || ''
+        maxDate.value = props.initialMaxDate || ''
+      }
     }
-  },
-)
+  )
 
-const minYearOptions = computed(() => {
-  const max = maxYear.value ? Number(maxYear.value) : Infinity
-  return yearOptions.filter((year) => year <= max)
-})
-
-const maxYearOptions = computed(() => {
-  const min = minYear.value ? Number(minYear.value) : -Infinity
-  return yearOptions.filter((year) => year >= min)
-})
-
-const handleApply = () => {
-  emit('apply', {
-    minYear: minYear.value ? Number(minYear.value) : undefined,
-    maxYear: maxYear.value ? Number(maxYear.value) : undefined,
-    minDate: minDate.value || undefined,
-    maxDate: maxDate.value || undefined,
+  const minYearOptions = computed(() => {
+    const max = maxYear.value ? Number(maxYear.value) : Infinity
+    return yearOptions.filter((year) => year <= max)
   })
-}
 
-const handleReset = () => {
-  minYear.value = ''
-  maxYear.value = ''
-  minDate.value = ''
-  maxDate.value = ''
-  emit('reset')
-}
+  const maxYearOptions = computed(() => {
+    const min = minYear.value ? Number(minYear.value) : -Infinity
+    return yearOptions.filter((year) => year >= min)
+  })
+
+  const handleApply = () => {
+    emit('apply', {
+      minYear: minYear.value ? Number(minYear.value) : undefined,
+      maxYear: maxYear.value ? Number(maxYear.value) : undefined,
+      minDate: minDate.value || undefined,
+      maxDate: maxDate.value || undefined,
+    })
+  }
+
+  const handleReset = () => {
+    minYear.value = ''
+    maxYear.value = ''
+    minDate.value = ''
+    maxDate.value = ''
+    emit('reset')
+  }
 </script>
 
 <template>
