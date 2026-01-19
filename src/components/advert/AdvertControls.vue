@@ -96,12 +96,25 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-end gap-3">
-    <div class="relative">
+  <div class="flex flex-wrap items-center gap-2 lg:gap-3">
+    <select
+      id="sort-select"
+      name="sort-select"
+      :value="sortKey"
+      @change="handleSort"
+      class="select flex-1 text-xs sm:flex-none sm:text-sm">
+      <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+
+    <div class="relative hidden sm:block">
       <div class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
         <Settings2 :size="16" />
       </div>
       <select
+        id="pagination-select"
+        name="pagination-select"
         :value="currentPaginationConfig"
         @change="handlePaginationChange"
         class="select pr-8 pl-9">
@@ -111,32 +124,29 @@
       </select>
     </div>
 
-    <select :value="sortKey" @change="handleSort" class="select">
-      <option v-for="option in sortOptions" :key="option.value" :value="option.value">
-        {{ option.label }}
-      </option>
-    </select>
+    <div class="flex items-center gap-2">
+      <div class="toggle-group p-0.5 sm:p-1">
+        <button
+          v-for="option in viewOptions"
+          :key="option.value"
+          @click="$emit('update:viewMode', option.value)"
+          :class="[
+            'rounded-md p-1 transition-colors sm:p-1.5',
+            viewMode === option.value
+              ? 'text-text-main bg-gray-100 shadow-sm dark:bg-slate-700 dark:text-white'
+              : 'hover:text-text-main text-gray-400 dark:hover:text-white',
+          ]">
+          <component :is="option.icon" :size="18" class="block sm:hidden" />
+          <component :is="option.icon" :size="20" class="hidden sm:block" />
+        </button>
+      </div>
 
-    <button @click="$emit('openFilter')" class="btn-primary relative">
-      <SlidersHorizontal :size="18" />
-      {{ t('home.filter') }}
-      <span
-        v-if="hasActiveFilters"
-        class="absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-green-500"></span>
-    </button>
-
-    <div class="toggle-group p-1">
-      <button
-        v-for="option in viewOptions"
-        :key="option.value"
-        @click="$emit('update:viewMode', option.value)"
-        :class="[
-          'cursor-pointer rounded-md p-1.5 transition-colors',
-          viewMode === option.value
-            ? 'text-text-main bg-gray-100 shadow-sm dark:bg-slate-700 dark:text-white'
-            : 'hover:text-text-main text-gray-400 dark:hover:text-white',
-        ]">
-        <component :is="option.icon" :size="20" class="block" />
+      <button @click="$emit('openFilter')" class="btn-primary relative px-3 py-2 text-sm lg:hidden">
+        <SlidersHorizontal :size="16" />
+        <span class="xs:inline hidden">{{ t('home.filter') }}</span>
+        <span
+          v-if="hasActiveFilters"
+          class="absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-green-500"></span>
       </button>
     </div>
   </div>

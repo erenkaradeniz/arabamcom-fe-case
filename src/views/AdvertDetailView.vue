@@ -1,27 +1,40 @@
 <script setup lang="ts">
-  import SmartImage from '@/components/common/SmartImage.vue'
-  import { useAdvertDetail, useAppNavigation, useGallery } from '@/composables'
-  import { PhotoSizes } from '@/types'
+  import AdvertMobileBar from '@/components/advert/AdvertMobileBar.vue'
+  import AdvertSellerCard from '@/components/advert/AdvertSellerCard.vue'
+  import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
+  import {
+    useAdvertDetail,
+    useAppNavigation,
+    useElementVisibility,
+    useGallery,
+  } from '@/composables'
+  import { PhotoSizes, type PhotoSizeType } from '@/types'
   import { getAdvertImage } from '@/utils/image'
   import { useTitle } from '@vueuse/core'
   import {
     ArrowLeft,
     Calendar,
     Camera,
+    CarFront,
     ChevronLeft,
     ChevronRight,
-    MapPin,
-    Phone,
+    Fuel,
+    Gauge,
+    Palette,
+    Settings,
     ShieldCheck,
     X,
   } from 'lucide-vue-next'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
 
   const { t } = useI18n()
   const route = useRoute()
   const advertId = Number(route.params.id)
+  const isPhoneRevealed = ref(false)
+  const sellerCardRef = ref<HTMLElement | null>(null)
+  const { isVisible: isSellerCardVisible } = useElementVisibility(sellerCardRef, { threshold: 0.1 })
 
   const { data: advert, isLoading, isError } = useAdvertDetail(advertId)
 
@@ -42,6 +55,24 @@
     return advert.value.photos[activePhotoIndex.value]
   })
 
+  const preferredLightboxSize = ref<PhotoSizeType>(PhotoSizes.Full)
+
+  const FALLBACK_ORDER = [
+    PhotoSizes.Full,
+    PhotoSizes.ExtraLarge,
+    PhotoSizes.Large,
+    PhotoSizes.Medium,
+    PhotoSizes.Small,
+    PhotoSizes.Thumbnail,
+  ]
+
+  const handleLightboxImageError = () => {
+    const currentIndex = FALLBACK_ORDER.indexOf(preferredLightboxSize.value)
+    if (currentIndex !== -1 && currentIndex < FALLBACK_ORDER.length - 1) {
+      preferredLightboxSize.value = FALLBACK_ORDER[currentIndex + 1] as PhotoSizeType
+    }
+  }
+
   const propertiesMap = computed(() => {
     const map = new Map<string, string>()
     if (advert.value?.properties) {
@@ -56,24 +87,44 @@
 
   const specifications = computed(() => {
     if (!advert.value) return []
+
     return [
-      [
-        { label: t('detail.specs.category'), value: advert.value.category.name },
-        { label: t('detail.specs.model'), value: advert.value.modelName },
-      ],
-      [
-        { label: t('detail.specs.year'), value: getProperty('year') },
-        { label: t('detail.specs.km'), value: getProperty('km') },
-      ],
-      [
-        { label: t('detail.specs.fuel'), value: getProperty('fuel') },
-        { label: t('detail.specs.gear'), value: getProperty('gear') },
-      ],
-      [
-        { label: t('detail.specs.color'), value: getProperty('color') },
-        { label: t('detail.specs.date'), value: advert.value.dateFormatted },
-      ],
-    ]
+      {
+        label: t('detail.specs.model'),
+        value: advert.value.modelName,
+        icon: CarFront,
+      },
+      {
+        label: t('detail.specs.year'),
+        value: getProperty('year'),
+        icon: Calendar,
+      },
+      {
+        label: t('detail.specs.km'),
+        value: getProperty('km'),
+        icon: Gauge,
+      },
+      {
+        label: t('detail.specs.fuel'),
+        value: getProperty('fuel'),
+        icon: Fuel,
+      },
+      {
+        label: t('detail.specs.gear'),
+        value: getProperty('gear'),
+        icon: Settings,
+      },
+      {
+        label: t('detail.specs.color'),
+        value: getProperty('color'),
+        icon: Palette,
+      },
+      {
+        label: t('detail.specs.date'),
+        value: advert.value.dateFormatted,
+        icon: Calendar,
+      },
+    ].filter((spec) => spec.value)
   })
 
   const { goBack, returnToHome } = useAppNavigation()
@@ -139,14 +190,14 @@
               <button
                 v-if="totalPhotos > 1"
                 @click.stop="prevPhoto"
-                class="absolute top-1/2 left-2 z-20 -translate-y-1/2 cursor-pointer rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70">
+                class="absolute top-1/2 left-2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70">
                 <ChevronLeft :size="24" />
               </button>
 
               <button
                 v-if="totalPhotos > 1"
                 @click.stop="nextPhoto"
-                class="absolute top-1/2 right-2 z-20 -translate-y-1/2 cursor-pointer rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70">
+                class="absolute top-1/2 right-2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70">
                 <ChevronRight :size="24" />
               </button>
             </div>
@@ -169,12 +220,24 @@
 
           <div class="surface overflow-hidden p-0">
             <h3 class="section-title border-0 px-6 pt-6">{{ t('detail.specifications') }}</h3>
-            <div>
-              <div v-for="(row, rowIndex) in specifications" :key="rowIndex" class="spec-row">
-                <template v-for="(spec, specIndex) in row" :key="specIndex">
-                  <div class="spec-label">{{ spec.label }}</div>
-                  <div class="spec-value">{{ spec.value || '-' }}</div>
-                </template>
+            <div class="p-6 pt-2">
+              <div class="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3">
+                <div
+                  v-for="(spec, index) in specifications"
+                  :key="index"
+                  class="flex items-center gap-3">
+                  <component
+                    :is="spec.icon"
+                    class="shrink-0 text-gray-400 dark:text-gray-500"
+                    :size="24"
+                    stroke-width="1.5" />
+                  <div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ spec.label }}</div>
+                    <div class="font-semibold text-gray-900 dark:text-gray-100">
+                      {{ spec.value }}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -189,54 +252,10 @@
 
         <div class="lg:col-span-4">
           <div class="sticky top-24 z-40 space-y-6">
-            <div class="seller-card">
-              <h1 class="mb-2 text-2xl leading-tight font-black text-gray-900 dark:text-white">
-                {{ advert.title }}
-              </h1>
-
-              <div class="mb-6 flex flex-wrap items-center gap-2">
-                <span class="tag">{{ advert.category.name }}</span>
-                <span v-if="getProperty('fuel')" class="tag">{{ getProperty('fuel') }}</span>
-                <span v-if="getProperty('gear')" class="tag">{{ getProperty('gear') }}</span>
-                <span v-if="getProperty('year')" class="tag">{{ getProperty('year') }}</span>
-              </div>
-
-              <div class="mb-6">
-                <div class="price-display">{{ advert.priceFormatted }}</div>
-              </div>
-
-              <a :href="`tel:${advert.userInfo.phone}`" class="btn-call">
-                <Phone :size="20" />
-                {{ t('detail.call_seller') }}
-              </a>
-
-              <div class="mt-6 border-t border-gray-100 pt-6 dark:border-gray-800">
-                <div class="flex items-center gap-4">
-                  <div
-                    class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-gray-200 to-gray-300 text-lg font-bold text-gray-600">
-                    {{ advert.userInfo.nameSurname.charAt(0) }}
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <h4 class="truncate font-bold text-gray-900 dark:text-white">
-                      {{ advert.userInfo.nameSurname }}
-                    </h4>
-                    <div class="text-sm text-gray-500">{{ advert.userInfo.phoneFormatted }}</div>
-                  </div>
-                </div>
-
-                <div class="mt-4 flex items-start gap-2 text-sm text-gray-500">
-                  <MapPin :size="18" class="mt-0.5 text-gray-400" />
-                  <p class="leading-snug">
-                    {{ advert.location.cityName }}, {{ advert.location.townName }}
-                    <br />
-                    <span class="flex items-center gap-1 text-xs text-gray-400">
-                      <Calendar :size="12" />
-                      {{ advert.dateFormatted }}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
+            <AdvertSellerCard
+              ref="sellerCardRef"
+              :advert="advert"
+              v-model:phone-revealed="isPhoneRevealed" />
 
             <div class="info-box">
               <div class="flex items-start gap-3">
@@ -254,6 +273,13 @@
           </div>
         </div>
       </div>
+
+      <AdvertMobileBar
+        :advert="advert"
+        :is-visible="!isSellerCardVisible"
+        v-model:phone-revealed="isPhoneRevealed" />
+
+      <div class="h-20 lg:hidden"></div>
     </div>
 
     <Teleport to="body">
@@ -280,19 +306,19 @@
 
           <div class="relative flex h-full w-full items-center justify-center overflow-hidden">
             <div
-              class="absolute inset-0 z-0 scale-110 bg-cover bg-center opacity-60 blur-3xl"
+              class="absolute inset-0 z-0 scale-110 bg-black bg-cover bg-center opacity-60 blur-3xl transition-all duration-300"
               :style="{
                 backgroundImage: `url(${getAdvertImage(activePhoto, PhotoSizes.Small)})`,
               }"></div>
 
-            <SmartImage
-              :src="activePhoto"
-              :alt="advert?.title"
-              :preferred-size="PhotoSizes.Full"
-              :aspect-ratio="'auto'"
-              object-fit="contain"
-              transparent
-              class="lightbox-image relative z-10 h-full w-full" />
+            <Transition name="lightbox-fade">
+              <img
+                :key="activePhotoIndex"
+                :src="getAdvertImage(activePhoto, preferredLightboxSize)"
+                :alt="advert?.title"
+                class="lightbox-image absolute inset-0 z-10 h-full w-full object-contain p-4 lg:p-10"
+                @error="handleLightboxImageError" />
+            </Transition>
           </div>
 
           <button @click="nextPhoto" class="lightbox-nav right-4">
@@ -319,6 +345,7 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -335,9 +362,6 @@
   }
 
   .lightbox-image {
-    max-width: 90vw;
-    max-height: 85vh;
-    object-fit: contain;
     border-radius: 0.5rem;
   }
 
@@ -370,6 +394,16 @@
 
   .lightbox-enter-from,
   .lightbox-leave-to {
+    opacity: 0;
+  }
+
+  .lightbox-fade-enter-active,
+  .lightbox-fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+
+  .lightbox-fade-enter-from,
+  .lightbox-fade-leave-to {
     opacity: 0;
   }
 </style>

@@ -49,7 +49,7 @@
         class="mt-8 overflow-hidden rounded-lg bg-gray-100 text-left dark:bg-slate-800">
         <details class="group">
           <summary
-            class="cursor-pointer p-4 font-mono text-xs font-bold text-gray-500 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-slate-700">
+            class="p-4 font-mono text-xs font-bold text-gray-500 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-slate-700">
             {{ t('global_error.details') }}
           </summary>
           <div class="border-t border-gray-200 p-4 dark:border-slate-700">
