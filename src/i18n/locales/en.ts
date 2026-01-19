@@ -57,4 +57,11 @@ export default {
       date: 'Advert Date',
     },
   },
+  global_error: {
+    title: 'Something went wrong',
+    message: 'An unexpected error occurred. You can try refreshing the page or returning home.',
+    reload: 'Refresh Page',
+    home: 'Go Home',
+    details: 'Error Details (Developer)',
+  },
 }

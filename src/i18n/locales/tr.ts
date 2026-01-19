@@ -57,4 +57,11 @@ export default {
       date: 'İlan Tarihi',
     },
   },
+  global_error: {
+    title: 'Bir şeyler yanlış gitti',
+    message: 'Beklenmedik bir hata oluştu. Sayfayı yenilemeyi veya ana sayfaya dönmeyi deneyebilirsiniz.',
+    reload: 'Sayfayı Yenile',
+    home: 'Ana Sayfa',
+    details: 'Hata Detayları (Geliştirici)',
+  },
 }
