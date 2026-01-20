@@ -64,7 +64,11 @@
       </header>
 
       <main class="container-main py-8">
-        <RouterView />
+        <RouterView v-slot="{ Component }">
+          <KeepAlive include="HomeView">
+            <component :is="Component" />
+          </KeepAlive>
+        </RouterView>
       </main>
 
       <footer class="footer">

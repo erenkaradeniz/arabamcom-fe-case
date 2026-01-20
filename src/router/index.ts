@@ -16,9 +16,11 @@ const router = createRouter({
       component: AdvertDetailView,
     },
   ],
-  scrollBehavior(_to, _from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) {
       return savedPosition
+    } else if (to.name === 'home') {
+      return undefined
     } else {
       return { top: 0 }
     }

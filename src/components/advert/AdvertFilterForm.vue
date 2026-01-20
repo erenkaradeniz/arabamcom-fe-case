@@ -11,14 +11,12 @@
       maxYear?: string | number
       minDate?: string
       maxDate?: string
-      categoryId?: string | number
     }>(),
     {
       minYear: '',
       maxYear: '',
       minDate: '',
       maxDate: '',
-      categoryId: '',
     }
   )
 
@@ -27,7 +25,6 @@
     (e: 'update:maxYear', value: string | number): void
     (e: 'update:minDate', value: string): void
     (e: 'update:maxDate', value: string): void
-    (e: 'update:categoryId', value: string | number): void
   }>()
 
   const { t, locale } = useI18n()
@@ -70,41 +67,10 @@
     emit('update:minDate', '')
     emit('update:maxDate', '')
   }
-
-  const resetCategory = () => {
-    emit('update:categoryId', '')
-  }
 </script>
 
 <template>
   <div class="space-y-4">
-    <BaseAccordion :title="t('home.category')">
-      <template #header-action="{ isOpen }">
-        <span v-if="!isOpen && categoryId" class="text-sm font-normal text-gray-500">
-          {{ categoryId }}
-        </span>
-        <button
-          v-else-if="isOpen && categoryId"
-          @click.stop="resetCategory"
-          class="text-sm font-medium text-red-600 hover:text-red-700 hover:underline dark:text-red-400">
-          {{ t('home.clear') }}
-        </button>
-      </template>
-      <div class="px-1">
-        <label for="category-id" class="mb-1 block text-xs text-gray-500">{{
-          t('home.category_id')
-        }}</label>
-        <input
-          id="category-id"
-          name="category-id"
-          type="number"
-          :value="categoryId"
-          @input="emit('update:categoryId', ($event.target as HTMLInputElement).value)"
-          class="input h-10 w-full !px-3 text-sm"
-          placeholder="ID" />
-      </div>
-    </BaseAccordion>
-
     <BaseAccordion :title="t('home.year')">
       <template #header-action="{ isOpen }">
         <span v-if="!isOpen && (minYear || maxYear)" class="text-sm font-normal text-gray-500">

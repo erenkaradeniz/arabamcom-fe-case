@@ -23,8 +23,6 @@ export default {
     date: 'Tarih',
     year: 'Yıl',
     all: 'Tümü',
-    category: 'Kategori',
-    category_id: 'Kategori ID',
     title: 'İlan Başlığı',
     price: 'Fiyat',
     location: 'İl / İlçe',
@@ -45,6 +43,7 @@ export default {
     show_number: 'Numarayı göster',
     safety_title: 'Güvenli Alışveriş',
     safety_text: 'Güvenliğiniz için kapora göndermeyin ya da benzeri hiçbir ön ödeme yapmayın.',
+    similar_adverts: 'Benzer İlanlar',
     specs: {
       model: 'Model',
       year: 'Yıl',

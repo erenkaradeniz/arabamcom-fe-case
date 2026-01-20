@@ -8,11 +8,7 @@ export const useAppNavigation = () => {
   }
 
   const returnToHome = () => {
-    if (window.history.state?.back) {
-      router.back()
-    } else {
-      router.push('/')
-    }
+    router.push({ name: 'home' })
   }
 
   return {

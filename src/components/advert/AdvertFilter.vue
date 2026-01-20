@@ -10,7 +10,6 @@
     initialMaxYear?: number
     initialMinDate?: string
     initialMaxDate?: string
-    initialCategoryId?: number | string
   }>()
 
   const emit = defineEmits<{
@@ -22,7 +21,6 @@
         maxYear?: number
         minDate?: string
         maxDate?: string
-        categoryId?: number | string
       }
     ): void
     (e: 'reset'): void
@@ -34,7 +32,6 @@
   const maxYear = ref<string | number>('')
   const minDate = ref<string>('')
   const maxDate = ref<string>('')
-  const categoryId = ref<string | number>('')
 
   watch(
     () => props.isOpen,
@@ -44,7 +41,6 @@
         maxYear.value = props.initialMaxYear || ''
         minDate.value = props.initialMinDate || ''
         maxDate.value = props.initialMaxDate || ''
-        categoryId.value = props.initialCategoryId || ''
       }
     }
   )
@@ -55,7 +51,6 @@
       maxYear: maxYear.value ? Number(maxYear.value) : undefined,
       minDate: minDate.value || undefined,
       maxDate: maxDate.value || undefined,
-      categoryId: categoryId.value || undefined,
     })
   }
 
@@ -64,7 +59,6 @@
     maxYear.value = ''
     minDate.value = ''
     maxDate.value = ''
-    categoryId.value = ''
     emit('reset')
   }
 </script>
@@ -73,7 +67,7 @@
   <BaseDrawer :is-open="isOpen" :title="t('home.filter')" @close="emit('close')">
     <template #header-action>
       <button
-        v-if="minYear || maxYear || minDate || maxDate || categoryId"
+        v-if="minYear || maxYear || minDate || maxDate"
         @click="handleReset"
         class="mr-2 text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400">
         {{ t('home.clear') }}
@@ -84,8 +78,7 @@
       v-model:min-year="minYear"
       v-model:max-year="maxYear"
       v-model:min-date="minDate"
-      v-model:max-date="maxDate"
-      v-model:category-id="categoryId" />
+      v-model:max-date="maxDate" />
 
     <template #footer>
       <button @click="handleApply" class="btn-primary w-full">

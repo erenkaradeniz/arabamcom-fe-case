@@ -23,8 +23,6 @@ export default {
     date: 'Date',
     year: 'Year',
     all: 'All',
-    category: 'Category',
-    category_id: 'Category ID',
     title: 'Listing Title',
     price: 'Price',
     location: 'Location',
@@ -45,6 +43,7 @@ export default {
     show_number: 'Show number',
     safety_title: 'Buy Safely',
     safety_text: 'For your own safety, do not send a deposit or make any similar advance payment.',
+    similar_adverts: 'Similar Adverts',
     specs: {
       model: 'Model',
       year: 'Year',

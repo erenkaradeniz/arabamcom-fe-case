@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import AdvertCard from '@/components/advert/AdvertCard.vue'
   import AdvertMobileBar from '@/components/advert/AdvertMobileBar.vue'
   import AdvertSellerCard from '@/components/advert/AdvertSellerCard.vue'
   import SmartImage from '@/components/common/SmartImage.vue'
@@ -9,7 +10,8 @@
     useElementVisibility,
     useGallery,
   } from '@/composables'
-  import { PhotoSizes, type PhotoSizeType } from '@/types'
+  import advertService from '@/services/advertService'
+  import { PhotoSizes, type AdvertListItem, type PhotoSizeType } from '@/types'
   import { getAdvertImage } from '@/utils/image'
   import { useTitle } from '@vueuse/core'
   import {
@@ -26,13 +28,13 @@
     ShieldCheck,
     X,
   } from 'lucide-vue-next'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
 
   const { t } = useI18n()
   const route = useRoute()
-  const advertId = Number(route.params.id)
+  const advertId = computed(() => Number(route.params.id))
   const isPhoneRevealed = ref(false)
   const sellerCardRef = ref<HTMLElement | null>(null)
   const { isVisible: isSellerCardVisible } = useElementVisibility(sellerCardRef, { threshold: 0.1 })
@@ -113,6 +115,40 @@
   })
 
   const { goBack, returnToHome } = useAppNavigation()
+
+  const similarAdverts = ref<AdvertListItem[]>([])
+  const isSimilarLoading = ref(false)
+
+  watch(
+    () => ({ id: advert.value?.id, categoryId: advert.value?.category?.id }),
+    async ({ id, categoryId }) => {
+      if (!categoryId || !id) return
+
+      try {
+        isSimilarLoading.value = true
+        const response = await advertService.getAdverts({
+          categoryId: categoryId,
+          take: 10,
+        })
+        similarAdverts.value = response.filter((a: AdvertListItem) => a.id !== id)
+      } catch (e) {
+        console.error('Failed to fetch similar adverts', e)
+      } finally {
+        isSimilarLoading.value = false
+      }
+    },
+    { immediate: true }
+  )
+
+  const similarAdvertsScrollRef = ref<HTMLElement | null>(null)
+
+  const scrollLeft = () => {
+    similarAdvertsScrollRef.value?.scrollBy({ left: -320, behavior: 'smooth' })
+  }
+
+  const scrollRight = () => {
+    similarAdvertsScrollRef.value?.scrollBy({ left: 320, behavior: 'smooth' })
+  }
 </script>
 
 <template>
@@ -142,9 +178,17 @@
       <nav class="breadcrumb mb-6">
         <a href="/" @click.prevent="returnToHome" class="breadcrumb-link">{{ t('nav.home') }}</a>
         <ChevronRight :size="14" />
-        <span class="font-medium text-gray-900 dark:text-gray-200">{{ advert.category.name }}</span>
+        <span
+          class="max-w-[200px] truncate font-medium text-gray-900 dark:text-gray-200"
+          :title="advert.category.name">
+          {{ advert.category.name }}
+        </span>
         <ChevronRight :size="14" />
-        <span class="font-medium text-gray-900 dark:text-gray-200">{{ advert.modelName }}</span>
+        <span
+          class="max-w-[200px] truncate font-medium text-gray-900 dark:text-gray-200"
+          :title="advert.modelName">
+          {{ advert.modelName }}
+        </span>
       </nav>
 
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
@@ -268,6 +312,44 @@
         :is-visible="!isSellerCardVisible"
         v-model:phone-revealed="isPhoneRevealed" />
 
+      <div v-if="isSimilarLoading || similarAdverts.length > 0" class="mt-8 lg:mt-12">
+        <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+          {{ t('detail.similar_adverts') }}
+        </h3>
+
+        <div v-if="isSimilarLoading" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <BaseSkeleton v-for="n in 4" :key="n" height="20rem" />
+        </div>
+
+        <div v-else class="group relative">
+          <button
+            @click="scrollLeft"
+            class="absolute top-1/2 -left-4 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 shadow-lg transition-all hover:bg-gray-50 disabled:opacity-50 md:flex dark:bg-slate-800 dark:hover:bg-slate-700">
+            <ChevronLeft :size="24" class="text-gray-600 dark:text-gray-300" />
+          </button>
+
+          <div
+            ref="similarAdvertsScrollRef"
+            class="scrollbar-hide flex gap-4 overflow-x-auto scroll-smooth px-4 pb-4 sm:px-0">
+            <div
+              v-for="similar in similarAdverts"
+              :key="similar.id"
+              class="max-w-[280px] min-w-[280px] sm:max-w-[300px] sm:min-w-[300px]">
+              <AdvertCard
+                :advert="similar"
+                :index="0"
+                @click="$router.push({ name: 'advert-detail', params: { id: similar.id } })" />
+            </div>
+          </div>
+
+          <button
+            @click="scrollRight"
+            class="absolute top-1/2 -right-4 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 shadow-lg transition-all hover:bg-gray-50 disabled:opacity-50 md:flex dark:bg-slate-800 dark:hover:bg-slate-700">
+            <ChevronRight :size="24" class="text-gray-600 dark:text-gray-300" />
+          </button>
+        </div>
+      </div>
+
       <div class="h-20 lg:hidden"></div>
     </div>
 
@@ -301,16 +383,11 @@
               }"></div>
 
             <Transition name="lightbox-fade">
-              <SmartImage
+              <img
                 :key="activePhotoIndex"
-                :src="activePhoto"
+                :src="getAdvertImage(activePhoto, preferredLightboxSize)"
                 :alt="advert?.title"
-                class="lightbox-image absolute inset-0 z-10 h-full w-full p-4 lg:p-10"
-                :preferred-size="preferredLightboxSize"
-                :show-skeleton="true"
-                aspect-ratio="unset"
-                :transparent="true"
-                object-fit="contain" />
+                class="absolute inset-0 z-10 h-full w-full object-contain p-4 lg:p-10" />
             </Transition>
           </div>
 

@@ -13,9 +13,27 @@
   import { useElementBounding } from '@vueuse/core'
   import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
   import { storeToRefs } from 'pinia'
-  import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+  import {
+    computed,
+    nextTick,
+    onActivated,
+    onMounted,
+    onUnmounted,
+    reactive,
+    ref,
+    watch,
+  } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { useRouter } from 'vue-router'
+  import {
+    onBeforeRouteLeave,
+    useRouter,
+    type NavigationGuardNext,
+    type RouteLocationNormalized,
+  } from 'vue-router'
+
+  defineOptions({
+    name: 'HomeView',
+  })
 
   const { t } = useI18n()
   const router = useRouter()
@@ -38,7 +56,6 @@
     maxYear: filters.value.maxYear,
     minDate: filters.value.minDate,
     maxDate: filters.value.maxDate,
-    categoryId: filters.value.categoryId,
   })
 
   watch(
@@ -48,7 +65,6 @@
       sidebarFilters.maxYear = newVal.maxYear
       sidebarFilters.minDate = newVal.minDate
       sidebarFilters.maxDate = newVal.maxDate
-      sidebarFilters.categoryId = newVal.categoryId
     },
     { deep: true }
   )
@@ -59,7 +75,6 @@
       maxYear: sidebarFilters.maxYear ? Number(sidebarFilters.maxYear) : undefined,
       minDate: sidebarFilters.minDate || undefined,
       maxDate: sidebarFilters.maxDate || undefined,
-      categoryId: sidebarFilters.categoryId || undefined,
     })
   }
 
@@ -222,6 +237,25 @@
     uiStore.setPaginationMode(mode)
     scrollToTop()
   }
+  const savedScrollPosition = ref(0)
+
+  onBeforeRouteLeave(
+    (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      savedScrollPosition.value = window.scrollY
+      next()
+    }
+  )
+
+  onActivated(() => {
+    if (savedScrollPosition.value > 0) {
+      nextTick(() => {
+        window.scrollTo({
+          top: savedScrollPosition.value,
+          behavior: 'instant',
+        })
+      })
+    }
+  })
 </script>
 
 <template>
@@ -279,7 +313,6 @@
             v-model:max-year="sidebarFilters.maxYear"
             v-model:min-date="sidebarFilters.minDate"
             v-model:max-date="sidebarFilters.maxDate"
-            v-model:category-id="sidebarFilters.categoryId"
             class="mb-6" />
 
           <button @click="handleSidebarApply" class="btn-primary w-full">
@@ -378,7 +411,6 @@
       :initial-max-year="filters.maxYear"
       :initial-min-date="filters.minDate"
       :initial-max-date="filters.maxDate"
-      :initial-category-id="filters.categoryId"
       @close="uiStore.closeFilterModal"
       @apply="handleApplyFilters"
       @reset="handleResetFilters" />
