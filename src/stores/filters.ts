@@ -30,7 +30,7 @@ export const useFilterStore = defineStore('filters', () => {
     resetPagination()
   }
 
-  const setSort = (key: string, sort: number, direction: number) => {
+  const setSort = (key: string, sort?: number, direction?: number) => {
     selectedSort.value = key
     filters.value.sort = sort
     filters.value.sortDirection = direction

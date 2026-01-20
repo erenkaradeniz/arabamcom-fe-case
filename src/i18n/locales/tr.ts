@@ -25,6 +25,9 @@ export default {
     all: 'Tümü',
     category: 'Kategori',
     category_id: 'Kategori ID',
+    title: 'İlan Başlığı',
+    price: 'Fiyat',
+    location: 'İl / İlçe',
   },
   sort: {
     advert_date_desc: 'Tarih - Yeniden Eskiye',

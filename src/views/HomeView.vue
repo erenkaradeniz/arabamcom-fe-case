@@ -4,9 +4,12 @@
   import AdvertFilter from '@/components/advert/AdvertFilter.vue'
   import AdvertFilterForm from '@/components/advert/AdvertFilterForm.vue'
   import AdvertListCard from '@/components/advert/AdvertListCard.vue'
+  import AdvertListHeader from '@/components/advert/AdvertListHeader.vue'
+  import AdvertTableCard from '@/components/advert/AdvertTableCard.vue'
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
   import { useAdvertListInfinite, useAdvertListPaged } from '@/composables/useAdverts'
   import { useFilterStore, useUIStore } from '@/stores'
+  import { SortDirection } from '@/types'
   import { useElementBounding } from '@vueuse/core'
   import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
   import { storeToRefs } from 'pinia'
@@ -176,6 +179,28 @@
     scrollToTop()
   }
 
+  const handleTableSort = (key: string, sortType: number) => {
+    if (filters.value.sort === sortType) {
+      const currentDirection = filters.value.sortDirection
+      const newDirection =
+        currentDirection === SortDirection.Descending
+          ? SortDirection.Ascending
+          : SortDirection.Descending
+
+      const dirSuffix = newDirection === SortDirection.Ascending ? 'asc' : 'desc'
+      filterStore.setSort(`${key}_${dirSuffix}`, sortType, newDirection)
+    } else {
+      const direction = SortDirection.Descending
+      const dirSuffix = 'desc'
+
+      const sortKey = `${key}_${dirSuffix}`
+
+      filterStore.setSort(sortKey, sortType, direction)
+    }
+
+    scrollToTop()
+  }
+
   const handleApplyFilters = (newFilters: {
     minYear?: number
     maxYear?: number
@@ -279,12 +304,31 @@
             @click="goToDetail(advert.id)" />
         </div>
 
-        <div v-else class="flex flex-col gap-4 pb-12">
+        <div v-else-if="viewMode === 'list'" class="flex flex-col gap-4 pb-12">
           <template v-if="isLoading && !currentAdverts.length">
             <BaseSkeleton v-for="n in 5" :key="n" height="12.5rem" />
           </template>
 
           <AdvertListCard
+            v-for="(advert, index) in currentAdverts"
+            :key="advert.id"
+            :advert="advert"
+            :index="index"
+            @click="goToDetail(advert.id)" />
+        </div>
+
+        <div v-else class="flex flex-col gap-2 pb-12">
+          <AdvertListHeader
+            v-if="!isLoading"
+            :current-sort="filters.sort || 0"
+            :current-direction="filters.sortDirection || 0"
+            @sort="handleTableSort" />
+
+          <template v-if="isLoading && !currentAdverts.length">
+            <BaseSkeleton v-for="n in 10" :key="n" height="4rem" />
+          </template>
+
+          <AdvertTableCard
             v-for="(advert, index) in currentAdverts"
             :key="advert.id"
             :advert="advert"

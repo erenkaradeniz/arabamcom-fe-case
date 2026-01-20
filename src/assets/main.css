@@ -202,3 +202,16 @@ button {
     scale: none !important;
   }
 }
+
+.advert-table-grid {
+  display: grid;
+  grid-template-columns: 120px 160px 1fr 80px 120px 100px 140px 120px 120px;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 1280px) {
+  .advert-table-grid {
+    grid-template-columns: 120px 140px 1fr 70px 100px 100px 130px 110px;
+  }
+}

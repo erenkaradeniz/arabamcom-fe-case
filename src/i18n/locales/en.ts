@@ -25,6 +25,9 @@ export default {
     all: 'All',
     category: 'Category',
     category_id: 'Category ID',
+    title: 'Listing Title',
+    price: 'Price',
+    location: 'Location',
   },
   sort: {
     advert_date_desc: 'Date - Newest to Oldest',

@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { SortDirection, SortType } from '@/types'
-  import { LayoutGrid, List, Settings2, SlidersHorizontal } from 'lucide-vue-next'
+  import { LayoutGrid, List, Settings2, SlidersHorizontal, TableProperties } from 'lucide-vue-next'
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   const props = defineProps<{
     take: number
     sortKey: string
-    viewMode: 'grid' | 'list'
+    viewMode: 'grid' | 'list' | 'table'
     paginationMode: 'scroll' | 'pagination'
     hasActiveFilters: boolean
   }>()
@@ -15,7 +15,7 @@
   const emit = defineEmits<{
     (e: 'update:take', value: 20 | 50): void
     (e: 'update:sort', value: { key: string; sort: number; direction: number }): void
-    (e: 'update:viewMode', value: 'grid' | 'list'): void
+    (e: 'update:viewMode', value: 'grid' | 'list' | 'table'): void
     (e: 'update:paginationMode', value: 'scroll' | 'pagination'): void
     (e: 'openFilter'): void
   }>()
@@ -84,6 +84,7 @@
   const viewOptions = [
     { value: 'grid', icon: LayoutGrid },
     { value: 'list', icon: List },
+    { value: 'table', icon: TableProperties },
   ] as const
 
   const handleSort = (event: Event) => {
@@ -135,6 +136,7 @@
             viewMode === option.value
               ? 'text-text-main bg-gray-100 shadow-sm dark:bg-slate-700 dark:text-white'
               : 'hover:text-text-main text-gray-400 dark:hover:text-white',
+            option.value === 'table' ? 'hidden md:flex' : '',
           ]">
           <component :is="option.icon" :size="18" class="block sm:hidden" />
           <component :is="option.icon" :size="20" class="hidden sm:block" />

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import AdvertMobileBar from '@/components/advert/AdvertMobileBar.vue'
   import AdvertSellerCard from '@/components/advert/AdvertSellerCard.vue'
+  import SmartImage from '@/components/common/SmartImage.vue'
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
   import {
     useAdvertDetail,
@@ -56,22 +57,6 @@
   })
 
   const preferredLightboxSize = ref<PhotoSizeType>(PhotoSizes.Full)
-
-  const FALLBACK_ORDER = [
-    PhotoSizes.Full,
-    PhotoSizes.ExtraLarge,
-    PhotoSizes.Large,
-    PhotoSizes.Medium,
-    PhotoSizes.Small,
-    PhotoSizes.Thumbnail,
-  ]
-
-  const handleLightboxImageError = () => {
-    const currentIndex = FALLBACK_ORDER.indexOf(preferredLightboxSize.value)
-    if (currentIndex !== -1 && currentIndex < FALLBACK_ORDER.length - 1) {
-      preferredLightboxSize.value = FALLBACK_ORDER[currentIndex + 1] as PhotoSizeType
-    }
-  }
 
   const propertiesMap = computed(() => {
     const map = new Map<string, string>()
@@ -210,10 +195,14 @@
                 :class="
                   index === activePhotoIndex ? 'gallery-thumbnail-active' : 'gallery-thumbnail'
                 ">
-                <img
-                  :src="getAdvertImage(photo, PhotoSizes.Thumbnail)"
+                <SmartImage
+                  :src="photo"
                   :alt="`${advert.title} - ${index + 1}`"
-                  class="h-full w-full object-cover" />
+                  :preferred-size="PhotoSizes.Thumbnail"
+                  aspect-ratio="unset"
+                  class="h-full w-full"
+                  image-class="h-full w-full"
+                  object-fit="cover" />
               </button>
             </div>
           </div>
@@ -312,12 +301,16 @@
               }"></div>
 
             <Transition name="lightbox-fade">
-              <img
+              <SmartImage
                 :key="activePhotoIndex"
-                :src="getAdvertImage(activePhoto, preferredLightboxSize)"
+                :src="activePhoto"
                 :alt="advert?.title"
-                class="lightbox-image absolute inset-0 z-10 h-full w-full object-contain p-4 lg:p-10"
-                @error="handleLightboxImageError" />
+                class="lightbox-image absolute inset-0 z-10 h-full w-full p-4 lg:p-10"
+                :preferred-size="preferredLightboxSize"
+                :show-skeleton="true"
+                aspect-ratio="unset"
+                :transparent="true"
+                object-fit="contain" />
             </Transition>
           </div>
 

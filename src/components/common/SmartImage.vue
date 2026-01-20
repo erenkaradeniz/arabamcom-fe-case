@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { PhotoSizes, type PhotoSizeType } from '@/types'
   import { getAdvertImage } from '@/utils/image'
+  import { ImageOff } from 'lucide-vue-next'
   import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
   import type { CSSProperties } from 'vue'
@@ -166,21 +167,10 @@
       </slot>
     </div>
 
-    <div v-if="hasError" class="smart-image-error">
+    <div v-if="hasError || !src" class="smart-image-error">
       <slot name="error">
         <div class="smart-image-error-inner">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="48"
-            height="48"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5">
-            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-            <circle cx="9" cy="9" r="2" />
-            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-          </svg>
+          <ImageOff :size="32" class="opacity-50" />
         </div>
       </slot>
     </div>

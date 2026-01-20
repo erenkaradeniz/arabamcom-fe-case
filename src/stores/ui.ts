@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useUIStore = defineStore('ui', () => {
-  const viewMode = useStorage<'grid' | 'list'>('ui-view-mode', 'grid')
+  const viewMode = useStorage<'grid' | 'list' | 'table'>('ui-view-mode', 'grid')
   const paginationMode = useStorage<'scroll' | 'pagination'>('ui-pagination-mode', 'scroll')
 
   const isFilterModalOpen = ref(false)

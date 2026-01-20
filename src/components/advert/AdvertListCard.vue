@@ -24,17 +24,17 @@
   const { transformStyle, handleMouseMove, handleMouseLeave } = useParallax()
 
   const advertProperties = computed(() => {
-    const props = []
+    const items = []
     const year = getProperty('year')
-    if (year) props.push({ label: 'year', value: year, icon: Calendar })
+    if (year) items.push({ label: 'year', value: year, icon: Calendar })
 
     const km = getProperty('km')
-    if (km) props.push({ label: 'km', value: formatKm(km), icon: Gauge })
+    if (km) items.push({ label: 'km', value: formatKm(km), icon: Gauge })
 
     const color = getProperty('color')
-    if (color) props.push({ label: 'color', value: color, icon: Palette })
+    if (color) items.push({ label: 'color', value: color, icon: Palette })
 
-    return props
+    return items
   })
 </script>
 
