@@ -26,6 +26,9 @@ export default {
     title: 'İlan Başlığı',
     price: 'Fiyat',
     location: 'İl / İlçe',
+    no_results_found: 'İlan bulunamadı',
+    try_changing_filters: 'Filtrelerinizi değiştirmeyi veya temizlemeyi deneyin.',
+    clear_filters: 'Filtreleri Temizle',
   },
   sort: {
     advert_date_desc: 'Tarih - Yeniden Eskiye',

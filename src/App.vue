@@ -37,7 +37,7 @@
   <div
     class="bg-background-light dark:bg-background-dark min-h-screen transition-colors duration-300">
     <GlobalError v-if="error" />
-    <div v-else>
+    <div v-else class="flex min-h-screen flex-col">
       <header class="header">
         <div class="container-main">
           <div class="flex h-16 items-center justify-between">
@@ -63,7 +63,7 @@
         </div>
       </header>
 
-      <main class="container-main py-8">
+      <main class="container-main w-full flex-1 py-8">
         <RouterView v-slot="{ Component }">
           <KeepAlive include="HomeView">
             <component :is="Component" />

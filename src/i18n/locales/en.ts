@@ -26,6 +26,9 @@ export default {
     title: 'Listing Title',
     price: 'Price',
     location: 'Location',
+    no_results_found: 'No adverts found',
+    try_changing_filters: 'Try changing or clearing your filters.',
+    clear_filters: 'Clear Filters',
   },
   sort: {
     advert_date_desc: 'Date - Newest to Oldest',

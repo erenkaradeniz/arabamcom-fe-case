@@ -11,7 +11,7 @@
   import { useFilterStore, useUIStore } from '@/stores'
   import { PaginationMode, SortDirection, ViewMode } from '@/types'
   import { useElementBounding } from '@vueuse/core'
-  import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
+  import { ChevronLeft, ChevronRight, Loader2, SearchX } from 'lucide-vue-next'
   import { storeToRefs } from 'pinia'
   import {
     computed,
@@ -267,7 +267,7 @@
     <div
       ref="headerRef"
       :class="[
-        'shadow-soft sticky top-20 z-40 mb-6 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-gray-100 bg-white/80 p-2 backdrop-blur-md sm:mb-8 sm:gap-4 sm:rounded-2xl sm:p-3 dark:border-slate-800 dark:bg-slate-900/80',
+        'shadow-soft sticky top-20 z-40 mb-6 flex w-full flex-wrap items-center justify-between gap-2 rounded-xl border border-gray-100 bg-white/80 p-2 backdrop-blur-md sm:mb-8 sm:gap-4 sm:rounded-2xl sm:p-3 dark:border-slate-800 dark:bg-slate-900/80',
         'transition-all duration-300',
         { '!rounded-b-none !border-b-transparent !shadow-none': isMerged },
       ]">
@@ -294,7 +294,7 @@
       {{ error?.message || t('common.error') }}
     </div>
 
-    <div class="flex flex-col lg:flex-row lg:gap-8">
+    <div class="flex w-full flex-col lg:flex-row lg:gap-8">
       <aside class="hidden w-80 flex-shrink-0 lg:block">
         <div
           ref="sidebarRef"
@@ -326,9 +326,29 @@
         </div>
       </aside>
 
-      <main class="flex-1">
+      <main class="w-full min-w-0 flex-1">
         <div
-          v-if="activeViewMode === ViewMode.Grid"
+          v-if="!isLoading && currentAdverts.length === 0"
+          class="flex w-full flex-1 flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-gray-200 bg-gray-50/50 py-24 text-center dark:border-slate-800 dark:bg-slate-900/50"
+          style="min-height: 600px">
+          <div class="rounded-full bg-white p-6 shadow-sm dark:bg-slate-800">
+            <SearchX class="text-gray-400 dark:text-gray-500" :size="48" />
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+              {{ t('home.no_results_found') }}
+            </h3>
+            <p class="text-text-muted text-sm">
+              {{ t('home.try_changing_filters') }}
+            </p>
+          </div>
+          <button @click="handleResetFilters" class="btn-secondary mt-4">
+            {{ t('home.clear_filters') }}
+          </button>
+        </div>
+
+        <div
+          v-else-if="activeViewMode === ViewMode.Grid"
           class="grid grid-cols-1 gap-6 pb-12 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           <template v-if="isLoading && !currentAdverts.length">
             <BaseSkeleton v-for="n in 8" :key="n" height="22rem" />
