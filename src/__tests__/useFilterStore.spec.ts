@@ -42,4 +42,13 @@ describe('useFilterStore', () => {
     expect(store.filters.minYear).toBeUndefined()
     expect(store.filters.take).toBe(50)
   })
+
+  it('updates window location search when filters change', async () => {
+    const store = useFilterStore()
+    store.applyFilters({ minYear: 2025 })
+
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    const searchParams = new URLSearchParams(window.location.search)
+    expect(searchParams.get('minYear')).toBe('2025')
+  })
 })

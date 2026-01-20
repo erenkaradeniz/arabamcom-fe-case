@@ -143,7 +143,7 @@
             :locale="currentLocale"
             :select-text="t('home.apply')"
             :cancel-text="t('home.clear')"
-            format="dd.MM.yyyy"
+            :formats="{ input: 'dd.MM.yyyy', preview: 'dd.MM.yyyy' }"
             :placeholder="t('home.date') + ' (Min)'"
             input-class-name="!h-10 !w-full !rounded-lg !border-gray-200 !bg-gray-50 !text-sm dark:!border-slate-700 dark:!bg-slate-900/50 dark:!text-gray-100" />
         </div>
@@ -159,7 +159,7 @@
             :locale="currentLocale"
             :select-text="t('home.apply')"
             :cancel-text="t('home.clear')"
-            format="dd.MM.yyyy"
+            :formats="{ input: 'dd.MM.yyyy', preview: 'dd.MM.yyyy' }"
             :placeholder="t('home.date') + ' (Max)'"
             input-class-name="!h-10 !w-full !rounded-lg !border-gray-200 !bg-gray-50 !text-sm dark:!border-slate-700 dark:!bg-slate-900/50 dark:!text-gray-100" />
         </div>
