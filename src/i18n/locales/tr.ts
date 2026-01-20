@@ -66,4 +66,7 @@ export default {
     home: 'Ana Sayfa',
     details: 'Hata Detayları (Geliştirici)',
   },
+  meta: {
+    title: 'arabam.com - İkinci El Araç İlanları',
+  },
 }

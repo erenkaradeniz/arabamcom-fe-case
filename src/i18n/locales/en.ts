@@ -65,4 +65,7 @@ export default {
     home: 'Go Home',
     details: 'Error Details (Developer)',
   },
+  meta: {
+    title: 'arabam.com - Second Hand Vehicle Listings',
+  },
 }

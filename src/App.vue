@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import GlobalError from '@/components/common/GlobalError.vue'
   import { useGlobalError } from '@/composables/useGlobalError'
-  import { useDark, useToggle } from '@vueuse/core'
+  import { useDark, useTitle, useToggle } from '@vueuse/core'
   import { Car, Languages, Moon, Sun } from 'lucide-vue-next'
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
@@ -10,6 +10,8 @@
   const { error } = useGlobalError()
 
   const { t, locale } = useI18n()
+
+  useTitle(computed(() => t('meta.title')))
 
   const isDark = useDark()
   const toggleDark = useToggle(isDark)
