@@ -1,17 +1,14 @@
 import { type AdvertQueryParams, SortDirection, SortType } from '@/types'
-import { useUrlSearchParams } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 export const useFilterStore = defineStore('filters', () => {
-  const filters = useUrlSearchParams<AdvertQueryParams>('history', {
-    removeFalsyValues: true,
+  const filters = reactive<AdvertQueryParams>({
+    take: 20,
+    skip: 0,
+    sort: SortType.Date,
+    sortDirection: SortDirection.Descending,
   })
-
-  if (!filters.take) filters.take = 20
-  if (filters.skip === undefined) filters.skip = 0
-  if (!filters.sort) filters.sort = SortType.Date
-  if (!filters.sortDirection) filters.sortDirection = SortDirection.Descending
 
   const selectedSort = ref('advert_date_desc')
 

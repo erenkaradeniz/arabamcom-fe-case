@@ -7,7 +7,12 @@
   import AdvertListHeader from '@/components/advert/AdvertListHeader.vue'
   import AdvertTableCard from '@/components/advert/AdvertTableCard.vue'
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
-  import { useAdvertListInfinite, useAdvertListPaged, useResponsiveLayout } from '@/composables'
+  import {
+    useAdvertListInfinite,
+    useAdvertListPaged,
+    useResponsiveLayout,
+    useUrlFilterSync,
+  } from '@/composables'
   import { useFilterStore, useUIStore } from '@/stores'
   import { PaginationMode, SortDirection, ViewMode } from '@/types'
   import { useElementBounding } from '@vueuse/core'
@@ -24,12 +29,7 @@
     watch,
   } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import {
-    onBeforeRouteLeave,
-    useRouter,
-    type NavigationGuardNext,
-    type RouteLocationNormalized,
-  } from 'vue-router'
+  import { onBeforeRouteLeave, useRouter } from 'vue-router'
 
   defineOptions({
     name: 'HomeView',
@@ -258,14 +258,14 @@
     uiStore.setPaginationMode(mode)
     scrollToTop()
   }
+
+  useUrlFilterSync(filters.value)
+
   const savedScrollPosition = ref(0)
 
-  onBeforeRouteLeave(
-    (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      savedScrollPosition.value = window.scrollY
-      next()
-    }
-  )
+  onBeforeRouteLeave(() => {
+    savedScrollPosition.value = window.scrollY
+  })
 
   onActivated(() => {
     if (savedScrollPosition.value > 0) {
