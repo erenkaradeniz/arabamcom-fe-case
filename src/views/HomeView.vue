@@ -71,6 +71,23 @@
     { deep: true }
   )
 
+  const hasSidebarChanges = computed(() => {
+    const f = filters.value
+    const s = sidebarFilters
+
+    const normalize = (val: unknown) => {
+      if (val === '' || val === null || val === undefined) return undefined
+      return String(val)
+    }
+
+    return (
+      normalize(f.minYear) !== normalize(s.minYear) ||
+      normalize(f.maxYear) !== normalize(s.maxYear) ||
+      normalize(f.minDate) !== normalize(s.minDate) ||
+      normalize(f.maxDate) !== normalize(s.maxDate)
+    )
+  })
+
   const handleSidebarApply = () => {
     handleApplyFilters({
       minYear: sidebarFilters.minYear ? Number(sidebarFilters.minYear) : undefined,
@@ -320,9 +337,19 @@
             v-model:max-date="sidebarFilters.maxDate"
             class="mb-6" />
 
-          <button @click="handleSidebarApply" class="btn-primary w-full">
-            {{ t('home.apply') }}
-          </button>
+          <Transition
+            enter-active-class="transition-all duration-300 ease-out overflow-hidden"
+            enter-from-class="opacity-0 -translate-y-2 max-h-0"
+            enter-to-class="opacity-100 translate-y-0 max-h-20"
+            leave-active-class="transition-all duration-300 ease-in overflow-hidden"
+            leave-from-class="opacity-100 translate-y-0 max-h-20"
+            leave-to-class="opacity-0 -translate-y-2 max-h-0">
+            <div v-if="hasSidebarChanges" class="pb-2">
+              <button @click="handleSidebarApply" class="btn-primary w-full">
+                {{ t('home.apply') }}
+              </button>
+            </div>
+          </Transition>
         </div>
       </aside>
 

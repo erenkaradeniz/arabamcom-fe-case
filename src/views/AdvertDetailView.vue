@@ -141,6 +141,13 @@
   )
 
   const similarAdvertsScrollRef = ref<HTMLElement | null>(null)
+  const similarAdvertsContainerRef = ref<HTMLElement | null>(null)
+
+  const scrollToSimilar = () => {
+    if (similarAdverts.value.length > 0 && similarAdvertsContainerRef.value) {
+      similarAdvertsContainerRef.value.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
 
   const scrollLeft = () => {
     similarAdvertsScrollRef.value?.scrollBy({ left: -320, behavior: 'smooth' })
@@ -179,8 +186,12 @@
         <a href="/" @click.prevent="returnToHome" class="breadcrumb-link">{{ t('nav.home') }}</a>
         <ChevronRight :size="14" />
         <span
-          class="max-w-[200px] truncate font-medium text-gray-900 dark:text-gray-200"
-          :title="advert.category.name">
+          class="max-w-[200px] truncate font-medium text-gray-900 transition-colors dark:text-gray-200"
+          :class="{
+            'cursor-pointer hover:text-red-600 dark:hover:text-red-400': similarAdverts.length > 0,
+          }"
+          :title="advert.category.name"
+          @click="scrollToSimilar">
           {{ advert.category.name }}
         </span>
         <ChevronRight :size="14" />
@@ -312,7 +323,10 @@
         :is-visible="!isSellerCardVisible"
         v-model:phone-revealed="isPhoneRevealed" />
 
-      <div v-if="isSimilarLoading || similarAdverts.length > 0" class="mt-8 lg:mt-12">
+      <div
+        v-if="isSimilarLoading || similarAdverts.length > 0"
+        ref="similarAdvertsContainerRef"
+        class="mt-8 lg:mt-12">
         <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           {{ t('detail.similar_adverts') }}
         </h3>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import BaseAccordion from '@/components/ui/BaseAccordion.vue'
   import { VueDatePicker } from '@vuepic/vue-datepicker'
+  import { useDark } from '@vueuse/core'
   import { enUS, tr } from 'date-fns/locale'
   import { computed, reactive } from 'vue'
   import { useI18n } from 'vue-i18n'
@@ -28,6 +29,7 @@
   }>()
 
   const { t, locale } = useI18n()
+  const isDark = useDark()
 
   const datePickerLocales = reactive({
     tr,
@@ -141,11 +143,12 @@
             auto-apply
             teleport="body"
             :locale="currentLocale"
+            :dark="isDark"
             :select-text="t('home.apply')"
             :cancel-text="t('home.clear')"
             :formats="{ input: 'dd.MM.yyyy', preview: 'dd.MM.yyyy' }"
             :placeholder="t('home.date') + ' (Min)'"
-            input-class-name="!h-10 !w-full !rounded-lg !border-gray-200 !bg-gray-50 !text-sm dark:!border-slate-700 dark:!bg-slate-900/50 dark:!text-gray-100" />
+            input-class-name="!h-10 !w-full !rounded-lg !border-gray-200 !bg-gray-50 !text-sm dark:!border-slate-800 dark:!bg-slate-900 dark:!text-gray-100" />
         </div>
         <div class="w-full">
           <label class="mb-1 block text-xs text-gray-500">Max</label>
@@ -157,11 +160,12 @@
             auto-apply
             teleport="body"
             :locale="currentLocale"
+            :dark="isDark"
             :select-text="t('home.apply')"
             :cancel-text="t('home.clear')"
             :formats="{ input: 'dd.MM.yyyy', preview: 'dd.MM.yyyy' }"
             :placeholder="t('home.date') + ' (Max)'"
-            input-class-name="!h-10 !w-full !rounded-lg !border-gray-200 !bg-gray-50 !text-sm dark:!border-slate-700 dark:!bg-slate-900/50 dark:!text-gray-100" />
+            input-class-name="!h-10 !w-full !rounded-lg !border-gray-200 !bg-gray-50 !text-sm dark:!border-slate-800 dark:!bg-slate-900 dark:!text-gray-100" />
         </div>
       </div>
     </BaseAccordion>

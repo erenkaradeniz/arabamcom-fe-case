@@ -45,11 +45,11 @@ button {
   }
 
   .input {
-    @apply focus:ring-primary/50 dark:focus:border-primary/50 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900/50 dark:text-gray-100;
+    @apply focus:ring-primary/50 dark:focus:border-primary/50 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:ring-2 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-gray-100;
   }
 
   .select {
-    @apply focus:ring-primary/50 dark:focus:border-primary/50 cursor-pointer rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:ring-2 focus:outline-none dark:border-slate-700 dark:bg-slate-900/50 dark:text-gray-100;
+    @apply focus:ring-primary/50 dark:focus:border-primary/50 cursor-pointer rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm focus:ring-2 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-gray-100;
   }
 
   .container-main {
@@ -214,4 +214,27 @@ button {
   .advert-table-grid {
     grid-template-columns: 120px 140px 1fr 70px 100px 100px 130px 110px;
   }
+}
+
+.dp__theme_dark {
+  --dp-background-color: #0f172a;
+  --dp-text-color: #f3f4f6;
+  --dp-hover-color: #1e293b;
+  --dp-hover-text-color: #f3f4f6;
+  --dp-hover-icon-color: #94a3b8;
+  --dp-primary-color: #d61f25;
+  --dp-primary-text-color: #ffffff;
+  --dp-secondary-color: #94a3b8;
+  --dp-border-color: #1e293b;
+  --dp-menu-border-color: #1e293b;
+  --dp-border-radius: 0.5rem;
+  --dp-disabled-color: #64748b;
+  --dp-scroll-bar-background: #0f172a;
+  --dp-scroll-bar-color: #475569;
+  --dp-success-color: #22c55e;
+  --dp-success-color-disabled: #166534;
+  --dp-icon-color: #94a3b8;
+  --dp-danger-color: #ef4444;
+  --dp-marker-color: #ef4444;
+  --dp-tooltip-color: #1e293b;
 }

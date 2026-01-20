@@ -103,6 +103,13 @@ A Lighthouse-compliant architecture was built with image lazy loading, Scroll Po
 
 A `useGlobalError` composable and `GlobalError` component were developed for centralized error management. API errors or unexpected situations are caught from a single point, providing users with a consistent error screen.
 
+### 13. Quick Access to Similar Adverts via Breadcrumb
+
+To enhance UX on the detail page, breadcrumb navigation has been made smarter:
+
+- Clicking the category name in the breadcrumb automatically **smooth scrolls** the page down to the **"Similar Adverts"** section.
+- This feature is conditionally active only when similar adverts exist; otherwise, the category name remains as static text.
+
 ---
 
 ## Project Structure

@@ -103,6 +103,13 @@ Görsel lazy loading, liste görünümüne dönüşte Scroll Position Restore ve
 
 Merkezi hata yönetimi için `useGlobalError` composable'ı ve `GlobalError` bileşeni geliştirildi. API hataları veya beklenmeyen durumlar tek noktadan yakalanarak kullanıcıya tutarlı bir hata ekranı sunulur.
 
+### 13. Breadcrumb Navigasyonu ile Benzer İlanlara Hızlı Erişim
+
+Detay sayfasında kullanıcı deneyimini artırmak için breadcrumb navigasyonu akıllı hale getirildi:
+
+- Breadcrumb üzerindeki kategori ismine tıklandığında, sayfa otomatik olarak **"Benzer İlanlar"** bölümüne yumuşak bir şekilde kayar.
+- Bu özellik sadece benzer ilanlar mevcutsa aktif olur; aksi takdirde kategori ismi normal metin olarak kalır.
+
 ---
 
 ## Proje Yapısı

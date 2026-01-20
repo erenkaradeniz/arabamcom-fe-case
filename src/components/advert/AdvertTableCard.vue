@@ -16,7 +16,7 @@
 
 <template>
   <div
-    class="advert-table-grid group relative cursor-pointer overflow-hidden rounded-xl border border-transparent bg-white px-4 py-3 text-sm shadow-sm transition-all duration-300 hover:border-gray-100 hover:bg-gray-50 hover:shadow-md md:rounded-none md:border-b-gray-100 md:shadow-none md:hover:border-b-gray-100 dark:bg-[#1e1e1e] dark:hover:border-gray-700 dark:hover:bg-white/5">
+    class="advert-table-grid group relative cursor-pointer overflow-hidden rounded-xl border border-transparent bg-white px-4 py-3 text-sm shadow-sm transition-all duration-300 hover:border-gray-100 hover:bg-gray-50 hover:shadow-md md:rounded-none md:border-b-gray-100 md:shadow-none md:hover:border-b-gray-100 dark:bg-[#1e293b] dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:md:border-b-slate-800 dark:md:hover:border-b-slate-700">
     <div
       class="relative h-[80px] w-full overflow-hidden rounded-lg bg-gray-200"
       @mousemove="handleMouseMove"
