@@ -27,6 +27,7 @@ describe('App', () => {
       messages: {
         tr: {
           nav: { switch_language: 'Lang', dark_mode: 'Dark', light_mode: 'Light' },
+          meta: { title: 'Test Title' },
         },
       },
     })

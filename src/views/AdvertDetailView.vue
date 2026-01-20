@@ -222,7 +222,7 @@
                 class="relative z-10 h-full w-full object-contain transition-opacity duration-300" />
 
               <div
-                class="absolute top-4 right-4 z-20 flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-bold shadow-sm backdrop-blur dark:bg-black/60">
+                class="absolute top-4 right-4 z-20 flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-bold shadow-sm backdrop-blur dark:bg-black/60 dark:text-white">
                 <Camera :size="16" />
                 {{ activePhotoIndex + 1 }}/{{ totalPhotos }}
               </div>
@@ -230,14 +230,14 @@
               <button
                 v-if="totalPhotos > 1"
                 @click.stop="prevPhoto"
-                class="absolute top-1/2 left-2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70">
+                class="absolute top-1/2 left-2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70 dark:text-white">
                 <ChevronLeft :size="24" />
               </button>
 
               <button
                 v-if="totalPhotos > 1"
                 @click.stop="nextPhoto"
-                class="absolute top-1/2 right-2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70">
+                class="absolute top-1/2 right-2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-md transition-opacity hover:bg-white dark:bg-black/70 dark:text-white">
                 <ChevronRight :size="24" />
               </button>
             </div>

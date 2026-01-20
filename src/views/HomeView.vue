@@ -286,7 +286,7 @@
       :class="[
         'shadow-soft sticky top-20 z-40 mb-6 flex w-full flex-wrap items-center justify-between gap-2 rounded-xl border border-gray-100 bg-white/80 p-2 backdrop-blur-md sm:mb-8 sm:gap-4 sm:rounded-2xl sm:p-3 dark:border-slate-800 dark:bg-slate-900/80',
         'transition-all duration-300',
-        { '!rounded-b-none !border-b-transparent !shadow-none': isMerged },
+        { 'rounded-b-none! border-b-transparent! shadow-none!': isMerged },
       ]">
       <div
         class="hidden h-10 items-center px-1 text-sm font-bold text-gray-800 sm:flex sm:px-2 sm:text-base dark:text-gray-200">
@@ -312,13 +312,13 @@
     </div>
 
     <div class="flex w-full flex-col lg:flex-row lg:gap-8">
-      <aside class="hidden w-80 flex-shrink-0 lg:block">
+      <aside class="hidden w-80 shrink-0 lg:block">
         <div
           ref="sidebarRef"
           :class="[
             'shadow-soft sticky top-36 rounded-2xl border border-gray-100 bg-white p-5 dark:border-slate-800 dark:bg-slate-900',
             'transition-all duration-300',
-            { '!rounded-t-none !border-t-transparent': isMerged },
+            { 'rounded-t-none! border-t-transparent!': isMerged },
           ]">
           <div class="mb-4 flex items-center justify-between">
             <h2 class="text-lg font-bold text-gray-900 dark:text-white">{{ t('home.filter') }}</h2>
@@ -437,22 +437,24 @@
           v-else-if="currentAdverts.length > 0"
           class="flex items-center justify-center gap-4 border-t border-gray-100 py-8 dark:border-gray-800">
           <button
+            v-if="currentPage > 1"
             @click="handlePageChange('prev')"
-            :disabled="currentPage === 1"
-            class="text-text-main flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-white dark:hover:bg-gray-800">
+            class="text-text-main flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-colors hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800">
             <ChevronLeft :size="20" />
             {{ t('common.prev') }}
           </button>
+          <div v-else class="w-[100px]"></div>
 
           <span class="text-primary text-lg font-bold">{{ currentPage }}</span>
 
           <button
+            v-if="currentAdverts.length >= (filters.take || 20)"
             @click="handlePageChange('next')"
-            :disabled="currentAdverts.length < (filters.take || 20)"
-            class="text-text-main flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-white dark:hover:bg-gray-800">
+            class="text-text-main flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-colors hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800">
             {{ t('common.next') }}
             <ChevronRight :size="20" />
           </button>
+          <div v-else class="w-[100px]"></div>
         </div>
       </main>
     </div>

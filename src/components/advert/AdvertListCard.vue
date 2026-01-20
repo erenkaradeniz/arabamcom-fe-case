@@ -74,7 +74,7 @@
     </div>
 
     <div
-      class="flex w-full flex-row items-center justify-between gap-4 p-4 md:w-[160px] md:flex-col md:items-end md:justify-center md:p-4 lg:w-[200px] lg:p-6">
+      class="flex w-full shrink-0 flex-row items-center justify-between gap-4 p-4 md:w-[160px] md:flex-col md:items-end md:justify-center md:p-4 lg:w-[200px] lg:p-6">
       <p class="text-primary text-xl font-extrabold lg:text-2xl">{{ advert.priceFormatted }}</p>
       <div
         class="group-hover:bg-primary flex items-center rounded-xl bg-gray-100 px-4 py-2 text-sm font-bold text-gray-500 transition-all group-hover:text-white dark:bg-slate-800 dark:text-gray-300 group-hover:dark:text-white">

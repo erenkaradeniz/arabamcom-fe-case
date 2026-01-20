@@ -1,5 +1,9 @@
 # Arabam.com Frontend Assignment
 
+[![Unit Tests](https://github.com/erenkaradeniz/arabamcom-fe-case/actions/workflows/ci.yml/badge.svg)](https://github.com/erenkaradeniz/arabamcom-fe-case/actions/workflows/ci.yml)
+![Cloudflare Pages](https://img.shields.io/badge/Deployed_on-Cloudflare_Pages-F38020?style=flat&logo=cloudflare&logoColor=white)
+[![Live Demo](https://img.shields.io/badge/demo-online-green.svg?style=flat&logo=safari)](https://arabamcom-fe-case.pages.dev/)
+
 **English** | [Türkçe](README.md)
 
 A vehicle listing and detail viewing application built with Vue 3 and TypeScript.
