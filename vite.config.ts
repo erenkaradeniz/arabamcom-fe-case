@@ -10,14 +10,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
-    plugins: [
-      vue(),
-      vueDevTools(),
-      tailwindcss(),
-    ],
+    plugins: [vue(), vueDevTools(), tailwindcss()],
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
     server: {
@@ -25,6 +21,16 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: env.VITE_API_TARGET,
           changeOrigin: true,
+        },
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'vue-router', 'pinia'],
+            query: ['@tanstack/vue-query'],
+          },
         },
       },
     },

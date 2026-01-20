@@ -1,54 +1,135 @@
-# arabamcom-fe-case
+# Arabam.com Frontend Assignment
 
-This template should help get you started developing with Vue 3 in Vite.
+[English](README.en.md) | **Türkçe**
 
-## Recommended IDE Setup
+Vue 3 ve TypeScript ile geliştirilmiş, araç ilanlarını listeleme ve detay görüntüleme uygulaması.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Kurulum & Çalıştırma
 
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
+# Bağımlılıkları yükle
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# Geliştirme sunucusunu başlat
 npm run dev
-```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
+# Production build
 npm run build
-```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
+# Testleri çalıştır
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## Teknolojiler
 
-```sh
-npm run lint
+| Kategori      | Teknoloji                  |
+| ------------- | -------------------------- |
+| Framework     | Vue 3 + TypeScript         |
+| State         | Pinia                      |
+| Data Fetching | TanStack Query (Vue Query) |
+| Styling       | Tailwind CSS v4            |
+| Routing       | Vue Router                 |
+| i18n          | Vue I18n                   |
+| Testing       | Vitest                     |
+| Icons         | Lucide Vue                 |
+
+---
+
+## Geliştirme Kararları
+
+### 1. UX Kararı: "Benzer İlanlar" ile Keşif
+
+API'de kategori listesi sunan bir servis olmadığı ve kullanıcıdan ID istemek kötü bir deneyim (UX) olduğu için filtrede `categoryId` kullanılmadı. Bunun yerine, ilan detayında mevcut ilanın kategorisi baz alınarak **"Benzer İlanlar"** listelendi ve içerik keşfi kolaylaştırıldı.
+
+### 2. Görsel Etkileşim ve Erişilebilirlik
+
+Derinlik hissi için `useParallax` hook'u geliştirildi. Ancak erişilebilirlik gözetilerek **prefers-reduced-motion** ayarı aktif olan kullanıcılarda parallax ve ani hover efektleri otomatik olarak devre dışı bırakılır.
+
+### 3. i18n Altyapısı
+
+Gelecekteki ölçeklenebilirlik adına, mevcut veri sadece Türkçe olsa da projeye **Vue I18n** entegrasyonu yapıldı. Proje, kod yapısında değişiklik gerekmeden global kullanıma hazırdır.
+
+### 4. Adaptif UX: Pagination & Infinite Scroll
+
+Uygulama, platform alışkanlıklarına göre şekillenen adaptif bir yapı sunar:
+
+| Platform     | Davranış                                     |
+| ------------ | -------------------------------------------- |
+| **Masaüstü** | Hızlı erişim ve navigasyon için Pagination   |
+| **Mobil**    | Kaydırma alışkanlığına uygun Infinite Scroll |
+
+### 5. Akıllı Görsel Yönetimi: SmartImage
+
+API'den gelen görseller farklı boyutlarda sunulmaktadır. `SmartImage` bileşeni bu durumu akıllıca yönetir:
+
+- **Lazy Loading**: IntersectionObserver ile viewport'a girince yükleme
+- **Progressive Fallback**: Tercih edilen boyut yüklenemezse otomatik olarak alt boyuta geçiş
+- **Skeleton UI**: Shimmer animasyonu ile yükleme durumu gösterimi
+- **Error State**: Tüm boyutlar başarısız olursa hata durumu
+
+### 6. URL-Tabanlı Filtre State'i (Deep Linking)
+
+Filtreler URL query parametrelerinde tutulur. Bu sayede:
+
+- Filtrelenmiş sonuçlar paylaşılabilir link olarak gönderilebilir
+- Tarayıcı geri/ileri navigasyonu filtre durumunu korur
+- Sayfa yenilemesinde filtre durumu kaybolmaz
+
+### 7. Vue Query ile Veri Yönetimi
+
+Veri çekme işlemleri için `@tanstack/vue-query` kullanıldı:
+
+- **Caching**: `staleTime` ile gereksiz API çağrıları önlenir
+- **Optimistic Updates**: `keepPreviousData` ile sayfa geçişlerinde veri kaybolmaz
+- **Infinite Query**: Mobil için sonsuz scroll desteği
+
+### 8. Dark Mode Desteği
+
+Modern ve göz yormayan bir karanlık tema entegre edildi. CSS değişkenleri ve Tailwind dark mode sınıfları ile tutarlı tema yönetimi sağlandı.
+
+### 9. Test Altyapısı (Vitest)
+
+Kod güvenilirliği için Vitest kullanılarak kritik composable fonksiyonları (`useAdvertDisplay`, `useFilterStore`) ve UI bileşenleri (`AdvertControls`, `HomeView`) için birim testleri yazıldı.
+
+### 10. Reusable UI Bileşenleri
+
+Kod tekrarını önlemek için `BaseAccordion` (animasyonlu paneller), `BaseDrawer` (mobil menü) ve `BaseSkeleton` gibi temel UI bileşenleri modüler hale getirildi.
+
+### 11. Performans Optimizasyonları
+
+Görsel lazy loading, liste görünümüne dönüşte Scroll Position Restore ve agresif veri önbellekleme stratejileri ile Lighthouse performans metriklerine uygun bir yapı kuruldu.
+
+### 12. Global Error Handling
+
+Merkezi hata yönetimi için `useGlobalError` composable'ı ve `GlobalError` bileşeni geliştirildi. API hataları veya beklenmeyen durumlar tek noktadan yakalanarak kullanıcıya tutarlı bir hata ekranı sunulur.
+
+---
+
+## Proje Yapısı
+
 ```
+src/
+├── components/          # Tekrar kullanılabilir UI bileşenleri
+│   ├── advert/          # İlan ile ilgili bileşenler
+│   ├── common/          # Genel bileşenler (SmartImage, GlobalError)
+│   └── ui/              # Base UI bileşenleri (Accordion, Drawer, Skeleton)
+├── composables/         # UI'dan bağımsız iş mantığı
+│   ├── useAdverts.ts    # İlan veri yönetimi (Vue Query)
+│   ├── useParallax.ts   # Parallax efekti
+│   ├── useGallery.ts    # Galeri navigasyonu
+│   └── ...
+├── services/            # API istekleri ve veri yönetimi
+├── stores/              # Pinia global state
+├── types/               # TypeScript tanımları
+├── utils/               # Yardımcı fonksiyonlar
+├── i18n/                # Dil dosyaları (tr, en)
+├── views/               # Sayfa bileşenleri
+├── router/              # Vue Router yapılandırması
+└── __tests__/           # Vitest birim testleri
+```
+
+---
+
+## Lisans
+
+Bu proje Arabam.com Frontend Assessment için geliştirilmiştir.
