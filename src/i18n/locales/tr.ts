@@ -44,6 +44,7 @@ export default {
     safety_title: 'Güvenli Alışveriş',
     safety_text: 'Güvenliğiniz için kapora göndermeyin ya da benzeri hiçbir ön ödeme yapmayın.',
     similar_adverts: 'Benzer İlanlar',
+    price: 'Fiyat',
     specs: {
       model: 'Model',
       year: 'Yıl',

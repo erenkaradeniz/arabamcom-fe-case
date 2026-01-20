@@ -7,9 +7,9 @@
   import AdvertListHeader from '@/components/advert/AdvertListHeader.vue'
   import AdvertTableCard from '@/components/advert/AdvertTableCard.vue'
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
-  import { useAdvertListInfinite, useAdvertListPaged } from '@/composables/useAdverts'
+  import { useAdvertListInfinite, useAdvertListPaged, useResponsiveLayout } from '@/composables'
   import { useFilterStore, useUIStore } from '@/stores'
-  import { SortDirection } from '@/types'
+  import { PaginationMode, SortDirection, ViewMode } from '@/types'
   import { useElementBounding } from '@vueuse/core'
   import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
   import { storeToRefs } from 'pinia'
@@ -43,6 +43,8 @@
 
   const { viewMode, paginationMode, isFilterModalOpen } = storeToRefs(uiStore)
   const { filters, selectedSort, currentPage, hasActiveFilters } = storeToRefs(filterStore)
+
+  const { activeViewMode, activePaginationMode } = useResponsiveLayout(uiStore)
 
   const headerRef = ref<HTMLElement | null>(null)
   const sidebarRef = ref<HTMLElement | null>(null)
@@ -80,14 +82,14 @@
 
   const loadMoreTrigger = ref<HTMLElement | null>(null)
 
-  const isInfiniteEnabled = computed(() => paginationMode.value === 'scroll')
-  const isPagedEnabled = computed(() => paginationMode.value === 'pagination')
+  const isInfiniteEnabled = computed(() => activePaginationMode.value === PaginationMode.Scroll)
+  const isPagedEnabled = computed(() => activePaginationMode.value === PaginationMode.Pagination)
 
   const infiniteQuery = useAdvertListInfinite(filters, isInfiniteEnabled)
   const pagedQuery = useAdvertListPaged(filters, isPagedEnabled)
 
   const currentAdverts = computed(() => {
-    if (paginationMode.value === 'scroll') {
+    if (activePaginationMode.value === PaginationMode.Scroll) {
       return infiniteQuery.data.value?.pages.flat() || []
     } else {
       return pagedQuery.data.value || []
@@ -95,19 +97,21 @@
   })
 
   const isLoading = computed(() => {
-    return paginationMode.value === 'scroll'
+    return activePaginationMode.value === PaginationMode.Scroll
       ? infiniteQuery.isLoading.value
       : pagedQuery.isLoading.value
   })
 
   const isError = computed(() => {
-    return paginationMode.value === 'scroll'
+    return activePaginationMode.value === PaginationMode.Scroll
       ? infiniteQuery.isError.value
       : pagedQuery.isError.value
   })
 
   const error = computed(() => {
-    return paginationMode.value === 'scroll' ? infiniteQuery.error.value : pagedQuery.error.value
+    return activePaginationMode.value === PaginationMode.Scroll
+      ? infiniteQuery.error.value
+      : pagedQuery.error.value
   })
 
   const handlePageChange = (direction: 'next' | 'prev') => {
@@ -122,7 +126,7 @@
   let observer: IntersectionObserver | null = null
 
   const setupObserver = () => {
-    if (paginationMode.value !== 'scroll') return
+    if (activePaginationMode.value !== PaginationMode.Scroll) return
     if (observer) observer.disconnect()
 
     observer = new IntersectionObserver(
@@ -142,11 +146,11 @@
   }
 
   watch(loadMoreTrigger, (el) => {
-    if (el && paginationMode.value === 'scroll') setupObserver()
+    if (el && activePaginationMode.value === PaginationMode.Scroll) setupObserver()
   })
 
-  watch(paginationMode, () => {
-    if (paginationMode.value === 'scroll') {
+  watch(activePaginationMode, () => {
+    if (activePaginationMode.value === PaginationMode.Scroll) {
       setTimeout(setupObserver, 100)
     } else {
       if (observer) observer.disconnect()
@@ -169,7 +173,7 @@
     if (observer) observer.disconnect()
     window.scrollTo({ top: 0, behavior: 'auto' })
 
-    if (paginationMode.value === 'scroll') {
+    if (activePaginationMode.value === PaginationMode.Scroll) {
       setTimeout(() => {
         setupObserver()
       }, 100)
@@ -233,7 +237,7 @@
     scrollToTop()
   }
 
-  const handlePaginationModeChange = (mode: 'scroll' | 'pagination') => {
+  const handlePaginationModeChange = (mode: PaginationMode) => {
     uiStore.setPaginationMode(mode)
     scrollToTop()
   }
@@ -267,7 +271,8 @@
         'transition-all duration-300',
         { '!rounded-b-none !border-b-transparent !shadow-none': isMerged },
       ]">
-      <div class="px-1 text-xs font-medium text-gray-500 sm:px-2 sm:text-sm dark:text-gray-400">
+      <div
+        class="hidden h-10 items-center px-1 text-sm font-bold text-gray-800 sm:flex sm:px-2 sm:text-base dark:text-gray-200">
         <span v-if="isLoading && !currentAdverts.length">{{ t('home.loading_listings') }}</span>
         <span v-else>{{ t('home.listing_count', { count: currentAdverts.length }) }}</span>
       </div>
@@ -323,7 +328,7 @@
 
       <main class="flex-1">
         <div
-          v-if="viewMode === 'grid'"
+          v-if="activeViewMode === ViewMode.Grid"
           class="grid grid-cols-1 gap-6 pb-12 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           <template v-if="isLoading && !currentAdverts.length">
             <BaseSkeleton v-for="n in 8" :key="n" height="22rem" />
@@ -337,7 +342,7 @@
             @click="goToDetail(advert.id)" />
         </div>
 
-        <div v-else-if="viewMode === 'list'" class="flex flex-col gap-4 pb-12">
+        <div v-else-if="activeViewMode === ViewMode.List" class="flex flex-col gap-4 pb-12">
           <template v-if="isLoading && !currentAdverts.length">
             <BaseSkeleton v-for="n in 5" :key="n" height="12.5rem" />
           </template>
@@ -350,7 +355,7 @@
             @click="goToDetail(advert.id)" />
         </div>
 
-        <div v-else class="flex flex-col gap-2 pb-12">
+        <div v-else-if="activeViewMode === ViewMode.Table" class="flex flex-col gap-2 pb-12">
           <AdvertListHeader
             v-if="!isLoading"
             :current-sort="filters.sort || 0"
@@ -370,7 +375,7 @@
         </div>
 
         <div
-          v-if="paginationMode === 'scroll'"
+          v-if="activePaginationMode === PaginationMode.Scroll"
           ref="loadMoreTrigger"
           class="flex h-20 w-full items-center justify-center py-8">
           <div

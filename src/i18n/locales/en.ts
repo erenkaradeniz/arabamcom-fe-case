@@ -44,6 +44,7 @@ export default {
     safety_title: 'Buy Safely',
     safety_text: 'For your own safety, do not send a deposit or make any similar advance payment.',
     similar_adverts: 'Similar Adverts',
+    price: 'Price',
     specs: {
       model: 'Model',
       year: 'Year',

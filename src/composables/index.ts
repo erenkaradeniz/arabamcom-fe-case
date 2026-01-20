@@ -1,5 +1,7 @@
+export * from './useAdvertDisplay'
 export * from './useAdverts'
 export * from './useAppNavigation'
 export * from './useElementVisibility'
 export * from './useGallery'
 export * from './useParallax'
+export * from './useResponsiveLayout'

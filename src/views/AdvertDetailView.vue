@@ -321,7 +321,7 @@
           <BaseSkeleton v-for="n in 4" :key="n" height="20rem" />
         </div>
 
-        <div v-else class="group relative">
+        <div v-else class="relative">
           <button
             @click="scrollLeft"
             class="absolute top-1/2 -left-4 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 shadow-lg transition-all hover:bg-gray-50 disabled:opacity-50 md:flex dark:bg-slate-800 dark:hover:bg-slate-700">
@@ -381,6 +381,15 @@
               :style="{
                 backgroundImage: `url(${getAdvertImage(activePhoto, PhotoSizes.Small)})`,
               }"></div>
+
+            <div
+              class="absolute inset-y-0 left-0 z-20 w-1/2 cursor-pointer"
+              @click.stop="prevPhoto"
+              :title="t('common.prev')"></div>
+            <div
+              class="absolute inset-y-0 right-0 z-20 w-1/2 cursor-pointer"
+              @click.stop="nextPhoto"
+              :title="t('common.next')"></div>
 
             <Transition name="lightbox-fade">
               <img

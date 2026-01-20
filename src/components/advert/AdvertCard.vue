@@ -1,10 +1,8 @@
 <script setup lang="ts">
   import SmartImage from '@/components/common/SmartImage.vue'
-  import { useParallax } from '@/composables'
+  import { useAdvertDisplay, useParallax } from '@/composables'
   import { type AdvertListItem, PhotoSizes } from '@/types'
-  import { formatKm } from '@/utils/format'
-  import { ArrowRight, Calendar, Gauge, MapPin, Palette } from 'lucide-vue-next'
-  import { computed } from 'vue'
+  import { MapPin } from 'lucide-vue-next'
   import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
@@ -14,27 +12,11 @@
     index?: number
   }>()
 
-  const getProperty = (name: string) => {
-    return props.advert.properties?.find((p) => p.name === name)?.value
-  }
+  const { advertProperties } = useAdvertDisplay(props.advert)
 
   const isAboveFold = (props.index ?? 0) < 4
 
   const { transformStyle, handleMouseMove, handleMouseLeave } = useParallax()
-
-  const advertProperties = computed(() => {
-    const props = []
-    const year = getProperty('year')
-    if (year) props.push({ label: 'year', value: year, icon: Calendar })
-
-    const km = getProperty('km')
-    if (km) props.push({ label: 'km', value: formatKm(km), icon: Gauge })
-
-    const color = getProperty('color')
-    if (color) props.push({ label: 'color', value: color, icon: Palette })
-
-    return props
-  })
 </script>
 
 <template>
@@ -89,11 +71,6 @@
         <p class="text-primary text-xl font-bold">
           {{ advert.priceFormatted }}
         </p>
-        <div
-          class="group-hover:text-text-main flex items-center text-xs font-semibold text-gray-400 transition-colors">
-          {{ t('common.detail') }}
-          <ArrowRight :size="16" class="ml-0.5 transition-transform group-hover:translate-x-0.5" />
-        </div>
       </div>
     </div>
   </div>

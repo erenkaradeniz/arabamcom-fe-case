@@ -1,22 +1,15 @@
+import { PaginationMode, ViewMode } from '@/types'
 import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useUIStore = defineStore('ui', () => {
-  const viewMode = useStorage<'grid' | 'list' | 'table'>('ui-view-mode', 'grid')
-  const paginationMode = useStorage<'scroll' | 'pagination'>('ui-pagination-mode', 'scroll')
+  const viewMode = useStorage<ViewMode>('ui-view-mode', ViewMode.Grid)
+  const paginationMode = useStorage<PaginationMode>('ui-pagination-mode', PaginationMode.Pagination)
 
   const isFilterModalOpen = ref(false)
 
-  const toggleViewMode = () => {
-    viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid'
-  }
-
-  const togglePaginationMode = () => {
-    paginationMode.value = paginationMode.value === 'scroll' ? 'pagination' : 'scroll'
-  }
-
-  const setPaginationMode = (mode: 'scroll' | 'pagination') => {
+  const setPaginationMode = (mode: PaginationMode) => {
     paginationMode.value = mode
   }
 
@@ -32,8 +25,6 @@ export const useUIStore = defineStore('ui', () => {
     viewMode,
     paginationMode,
     isFilterModalOpen,
-    toggleViewMode,
-    togglePaginationMode,
     setPaginationMode,
     openFilterModal,
     closeFilterModal,

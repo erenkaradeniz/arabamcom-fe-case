@@ -5,3 +5,13 @@ export interface ApiValidationError {
   traceId: string
   errors: Record<string, string[]>
 }
+export enum PaginationMode {
+  Scroll = 'scroll',
+  Pagination = 'pagination',
+}
+
+export enum ViewMode {
+  Grid = 'grid',
+  List = 'list',
+  Table = 'table',
+}

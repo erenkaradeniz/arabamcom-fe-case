@@ -1,11 +1,9 @@
 <script setup lang="ts">
   import SmartImage from '@/components/common/SmartImage.vue'
-  import { useParallax } from '@/composables'
+  import { useAdvertDisplay, useParallax } from '@/composables'
   import type { AdvertListItem } from '@/types'
   import { PhotoSizes } from '@/types'
-  import { formatKm } from '@/utils/format'
-  import { ArrowRight, Calendar, Gauge, MapPin, Palette } from 'lucide-vue-next'
-  import { computed } from 'vue'
+  import { ArrowRight, MapPin } from 'lucide-vue-next'
   import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
@@ -15,34 +13,18 @@
     index?: number
   }>()
 
-  const getProperty = (name: string) => {
-    return props.advert.properties?.find((p) => p.name === name)?.value
-  }
+  const { advertProperties } = useAdvertDisplay(props.advert)
 
   const isAboveFold = (props.index ?? 0) < 3
 
   const { transformStyle, handleMouseMove, handleMouseLeave } = useParallax()
-
-  const advertProperties = computed(() => {
-    const items = []
-    const year = getProperty('year')
-    if (year) items.push({ label: 'year', value: year, icon: Calendar })
-
-    const km = getProperty('km')
-    if (km) items.push({ label: 'km', value: formatKm(km), icon: Gauge })
-
-    const color = getProperty('color')
-    if (color) items.push({ label: 'color', value: color, icon: Palette })
-
-    return items
-  })
 </script>
 
 <template>
   <div
     class="group bg-card-light shadow-soft hover:shadow-lift relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-transparent transition-all duration-300 hover:border-gray-100 md:flex-row dark:bg-[#1e1e1e] dark:hover:border-gray-700">
     <div
-      class="relative w-full shrink-0 overflow-hidden bg-gray-200 md:h-[200px] md:w-[320px]"
+      class="relative w-full shrink-0 overflow-hidden bg-gray-200 md:w-[220px] lg:w-[320px]"
       style="aspect-ratio: 16/10"
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseLeave">
@@ -65,13 +47,13 @@
     </div>
 
     <div
-      class="flex flex-grow flex-col justify-center border-b border-gray-100 p-4 md:border-r md:border-b-0 md:p-6 dark:border-gray-800">
+      class="flex flex-grow flex-col justify-center border-b border-gray-100 p-4 md:border-r md:border-b-0 md:p-4 lg:p-6 dark:border-gray-800">
       <h3
-        class="text-text-main group-hover:text-primary mb-2 text-lg font-bold transition-colors md:text-xl dark:text-white">
+        class="text-text-main group-hover:text-primary mb-2 text-lg font-bold transition-colors md:text-lg lg:text-xl dark:text-white">
         {{ advert.title }}
       </h3>
 
-      <div class="text-text-muted mb-4 flex flex-wrap items-center gap-2 text-sm font-medium">
+      <div class="text-text-muted mb-4 flex flex-wrap items-center gap-4 text-sm font-medium">
         <span
           v-for="prop in advertProperties"
           :key="prop.label"
@@ -92,8 +74,8 @@
     </div>
 
     <div
-      class="flex w-full flex-row items-center justify-between gap-4 p-4 md:w-[200px] md:flex-col md:items-end md:justify-center md:p-6">
-      <p class="text-primary text-2xl font-extrabold">{{ advert.priceFormatted }}</p>
+      class="flex w-full flex-row items-center justify-between gap-4 p-4 md:w-[160px] md:flex-col md:items-end md:justify-center md:p-4 lg:w-[200px] lg:p-6">
+      <p class="text-primary text-xl font-extrabold lg:text-2xl">{{ advert.priceFormatted }}</p>
       <div
         class="group-hover:bg-primary flex items-center rounded-xl bg-gray-100 px-4 py-2 text-sm font-bold text-gray-500 transition-all group-hover:text-white dark:bg-gray-800">
         {{ t('common.detail') }}
