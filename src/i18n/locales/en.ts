@@ -65,6 +65,16 @@ export default {
     home: 'Go Home',
     details: 'Error Details (Developer)',
   },
+  api_error: {
+    network: 'Connection error. Please check your internet connection.',
+    generic: 'An error occurred.',
+    validation: 'Validation error.',
+    unauthorized: 'Your session has expired. Please log in again.',
+    forbidden: 'You do not have permission for this action.',
+    not_found: 'The content you are looking for was not found.',
+    server: 'Server error. Please try again later.',
+    service_unavailable: 'Service temporarily unavailable. Please try again in a few minutes.',
+  },
   meta: {
     title: 'arabam.com - Second Hand Vehicle Listings',
   },
