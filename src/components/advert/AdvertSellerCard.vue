@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import { useAdvertDisplay } from '@/composables'
   import { type AdvertDetail } from '@/types'
   import { MapPin, Phone } from 'lucide-vue-next'
-  import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   const props = defineProps<{
@@ -15,17 +15,7 @@
 
   const { t } = useI18n()
 
-  const propertyMap = computed(() => {
-    const map = new Map<string, string>()
-    if (props.advert.properties) {
-      for (const p of props.advert.properties) {
-        map.set(p.name, p.value)
-      }
-    }
-    return map
-  })
-
-  const getProperty = (name: string) => propertyMap.value.get(name)
+  const { getProperty } = useAdvertDisplay(props.advert)
 
   const handlePhoneClick = (e: MouseEvent) => {
     if (!props.phoneRevealed) {

@@ -141,11 +141,15 @@ button {
   }
 
   .gallery-thumbnail {
-    @apply h-16 w-24 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-transparent opacity-70 transition-all hover:opacity-100;
+    @apply flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-transparent opacity-70 transition-all hover:opacity-100;
+    height: 4rem;
+    width: 6rem;
   }
 
   .gallery-thumbnail-active {
-    @apply border-primary h-16 w-24 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 opacity-100;
+    @apply border-primary flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 opacity-100;
+    height: 4rem;
+    width: 6rem;
   }
 
   .sidebar-sticky {
@@ -214,6 +218,45 @@ button {
   .advert-table-grid {
     grid-template-columns: 120px 140px 1fr 70px 100px 100px 130px 110px;
   }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.95);
+}
+
+.lightbox-enter-active,
+.lightbox-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-enter-from,
+.lightbox-leave-to {
+  opacity: 0;
+}
+
+.lightbox-fade-enter-active,
+.lightbox-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-fade-enter-from,
+.lightbox-fade-leave-to {
+  opacity: 0;
 }
 
 .dp__theme_dark {

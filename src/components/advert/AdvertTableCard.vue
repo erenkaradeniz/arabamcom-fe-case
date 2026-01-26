@@ -18,15 +18,17 @@
   <div
     class="advert-table-grid group relative cursor-pointer overflow-hidden rounded-xl border border-transparent bg-white px-4 py-3 text-sm shadow-sm transition-all duration-300 hover:border-gray-100 hover:bg-gray-50 hover:shadow-md md:rounded-none md:border-b-gray-100 md:shadow-none md:hover:border-b-gray-100 dark:bg-[#1e293b] dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:md:border-b-slate-800 dark:md:hover:border-b-slate-700">
     <div
-      class="relative h-[80px] w-full overflow-hidden rounded-lg bg-gray-200"
+      class="relative h-[80px] w-full overflow-hidden rounded-lg"
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseLeave">
       <SmartImage
         :src="advert.photo"
         :alt="advert.title"
-        :preferred-size="PhotoSizes.Thumbnail"
-        class="h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform"
-        :style="transformStyle" />
+        :preferred-size="PhotoSizes.Fit"
+        class="h-full w-full bg-transparent!"
+        object-fit="contain"
+        :style="transformStyle"
+        :transparent="true" />
     </div>
 
     <div class="truncate font-medium text-gray-900 dark:text-white">

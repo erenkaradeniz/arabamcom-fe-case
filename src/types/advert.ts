@@ -71,6 +71,7 @@ export const PhotoSizes = {
   Small: '160x120',
   Medium: '240x180',
   Large: '580x435',
+  Fit: '580x0',
   ExtraLarge: '800x600',
   Full: '1920x1080',
 } as const

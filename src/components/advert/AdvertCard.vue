@@ -3,9 +3,6 @@
   import { useAdvertDisplay, useParallax } from '@/composables'
   import { type AdvertListItem, PhotoSizes } from '@/types'
   import { MapPin } from 'lucide-vue-next'
-  import { useI18n } from 'vue-i18n'
-
-  const { t } = useI18n()
 
   const props = defineProps<{
     advert: AdvertListItem
@@ -22,23 +19,21 @@
 <template>
   <div class="card-interactive group relative flex h-full flex-col">
     <div
-      class="relative w-full overflow-hidden bg-gray-200"
+      class="relative w-full overflow-hidden"
       style="aspect-ratio: 4/3"
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseLeave">
       <SmartImage
         :src="advert.photo"
         :alt="advert.title"
-        :preferred-size="PhotoSizes.Large"
+        :preferred-size="PhotoSizes.Fit"
         :lazy="!isAboveFold"
         :aspect-ratio="'4/3'"
         image-class="transition-transform duration-700"
         :image-style="transformStyle"
-        class="h-full w-full" />
-
-      <div v-if="advert.price > 2000000" class="badge-premium">
-        {{ t('common.premium') }}
-      </div>
+        :transparent="true"
+        object-fit="contain"
+        class="h-full w-full bg-transparent!" />
     </div>
 
     <div class="flex flex-1 flex-col p-4 md:p-5">

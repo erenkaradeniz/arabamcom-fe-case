@@ -66,6 +66,17 @@ export default {
     home: 'Ana Sayfa',
     details: 'Hata Detayları (Geliştirici)',
   },
+  api_error: {
+    network: 'Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin.',
+    generic: 'Bir hata oluştu.',
+    validation: 'Doğrulama hatası.',
+    unauthorized: 'Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.',
+    forbidden: 'Bu işlem için yetkiniz bulunmuyor.',
+    not_found: 'Aradığınız içerik bulunamadı.',
+    server: 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.',
+    service_unavailable:
+      'Servis geçici olarak kullanılamıyor. Lütfen birkaç dakika sonra tekrar deneyin.',
+  },
   meta: {
     title: 'arabam.com - İkinci El Araç İlanları',
   },
