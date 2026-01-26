@@ -14,6 +14,9 @@ A vehicle listing and detail viewing application built with Vue 3 and TypeScript
 # Install dependencies
 npm install
 
+# Create .env file
+cp .env.example .env
+
 # Start development server
 npm run dev
 

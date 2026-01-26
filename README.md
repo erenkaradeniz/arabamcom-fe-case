@@ -14,6 +14,9 @@ Vue 3 ve TypeScript ile geliştirilmiş, araç ilanlarını listeleme ve detay g
 # Bağımlılıkları yükle
 npm install
 
+# .env dosyasını oluştur
+cp .env.example .env
+
 # Geliştirme sunucusunu başlat
 npm run dev
 
