@@ -1,12 +1,23 @@
-import type { AdvertListItem } from '@/types'
+import type { AdvertDetail, AdvertListItem, Property } from '@/types'
 import { formatKm } from '@/utils/format'
 import { Calendar, Gauge, Palette } from 'lucide-vue-next'
-import { computed } from 'vue'
+import { computed, type MaybeRef, unref } from 'vue'
 
-export const useAdvertDisplay = (advert: AdvertListItem) => {
-  const getProperty = (name: string) => {
-    return advert.properties?.find((p) => p.name === name)?.value
-  }
+type AdvertWithProperties = AdvertListItem | AdvertDetail | { properties?: Property[] }
+
+export const useAdvertDisplay = (advert: MaybeRef<AdvertWithProperties | null | undefined>) => {
+  const propertiesMap = computed(() => {
+    const map = new Map<string, string>()
+    const advertValue = unref(advert)
+    if (advertValue?.properties) {
+      for (const p of advertValue.properties) {
+        map.set(p.name, p.value)
+      }
+    }
+    return map
+  })
+
+  const getProperty = (name: string) => propertiesMap.value.get(name)
 
   const advertProperties = computed(() => {
     const items = []
@@ -24,6 +35,7 @@ export const useAdvertDisplay = (advert: AdvertListItem) => {
 
   return {
     getProperty,
+    propertiesMap,
     advertProperties,
   }
 }
