@@ -8,6 +8,7 @@
   import AdvertTableCard from '@/components/advert/AdvertTableCard.vue'
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
   import {
+    useActiveQueryState,
     useAdvertListInfinite,
     useAdvertListPaged,
     useResponsiveLayout,
@@ -105,31 +106,11 @@
   const infiniteQuery = useAdvertListInfinite(filters, isInfiniteEnabled)
   const pagedQuery = useAdvertListPaged(filters, isPagedEnabled)
 
-  const currentAdverts = computed(() => {
-    if (activePaginationMode.value === PaginationMode.Scroll) {
-      return infiniteQuery.data.value?.pages.flat() || []
-    } else {
-      return pagedQuery.data.value || []
-    }
-  })
-
-  const isLoading = computed(() => {
-    return activePaginationMode.value === PaginationMode.Scroll
-      ? infiniteQuery.isLoading.value
-      : pagedQuery.isLoading.value
-  })
-
-  const isError = computed(() => {
-    return activePaginationMode.value === PaginationMode.Scroll
-      ? infiniteQuery.isError.value
-      : pagedQuery.isError.value
-  })
-
-  const error = computed(() => {
-    return activePaginationMode.value === PaginationMode.Scroll
-      ? infiniteQuery.error.value
-      : pagedQuery.error.value
-  })
+  const { currentAdverts, isLoading, isError, error } = useActiveQueryState(
+    infiniteQuery,
+    pagedQuery,
+    activePaginationMode
+  )
 
   const handlePageChange = (direction: 'next' | 'prev') => {
     if (direction === 'next') {
