@@ -3,7 +3,7 @@
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
   import { useSimilarAdverts } from '@/composables'
   import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   const props = defineProps<{
@@ -11,11 +11,25 @@
     currentAdvertId: number
   }>()
 
+  const emit = defineEmits<{
+    (e: 'loaded', count: number): void
+  }>()
+
   const { t } = useI18n()
 
   const { data: similarAdverts, isLoading } = useSimilarAdverts(
     computed(() => props.categoryId),
     computed(() => props.currentAdvertId)
+  )
+
+  watch(
+    similarAdverts,
+    (newAdverts) => {
+      if (newAdverts) {
+        emit('loaded', newAdverts.length)
+      }
+    },
+    { immediate: true }
   )
 
   const scrollRef = ref<HTMLElement | null>(null)

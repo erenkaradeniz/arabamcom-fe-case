@@ -1,11 +1,12 @@
 import { useGlobalError } from '@/composables/useGlobalError'
 import i18n from '@/i18n'
-import { VueQueryPlugin } from '@tanstack/vue-query'
+import { QueryCache, VueQueryPlugin } from '@tanstack/vue-query'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import './assets/main.css'
 
+import { ApiError } from '@/services/apiClient'
 import App from './App.vue'
 import router from './router'
 
@@ -24,6 +25,15 @@ app.use(router)
 app.use(i18n)
 app.use(VueQueryPlugin, {
   queryClientConfig: {
+    queryCache: new QueryCache({
+      onError: (error) => {
+        if (error instanceof ApiError) {
+          if (error.status >= 500 || error.code === 'NETWORK_ERROR') {
+            setError(error)
+          }
+        }
+      },
+    }),
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,

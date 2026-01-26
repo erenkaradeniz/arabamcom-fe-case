@@ -73,7 +73,12 @@
         v-for="(photo, index) in advert.photos"
         :key="index"
         @click="activePhotoIndex = index"
-        :class="index === activePhotoIndex ? 'gallery-thumbnail-active' : 'gallery-thumbnail'">
+        :class="[
+          'relative h-16 w-24 shrink-0 overflow-hidden rounded-md border-2 transition-all',
+          index === activePhotoIndex
+            ? 'border-primary ring-primary opacity-100 ring-2'
+            : 'border-transparent opacity-60 hover:opacity-100',
+        ]">
         <SmartImage
           :src="photo"
           :alt="`${advert.title} - ${index + 1}`"
@@ -155,14 +160,6 @@
 <style scoped>
   .gallery-main {
     aspect-ratio: 16/9;
-  }
-
-  .gallery-thumbnail {
-    @apply relative h-16 w-24 shrink-0 overflow-hidden rounded-md opacity-60 transition-all hover:opacity-100;
-  }
-
-  .gallery-thumbnail-active {
-    @apply border-primary ring-primary relative h-16 w-24 shrink-0 overflow-hidden rounded-md border-2 opacity-100 ring-2;
   }
 
   .lightbox-nav {

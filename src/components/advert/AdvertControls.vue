@@ -103,6 +103,7 @@
       name="sort-select"
       :value="sortKey"
       @change="handleSort"
+      aria-label="Sort adverts"
       class="select min-w-0 flex-1 text-xs sm:flex-none sm:text-sm">
       <option v-for="option in sortOptions" :key="option.value" :value="option.value">
         {{ option.label }}
@@ -118,6 +119,7 @@
         name="pagination-select"
         :value="currentPaginationConfig"
         @change="handlePaginationChange"
+        aria-label="Pagination options"
         class="select pr-8 pl-9">
         <option v-for="option in paginationOptions" :key="option.value" :value="option.value">
           {{ option.label }}
@@ -131,6 +133,8 @@
           v-for="option in viewOptions"
           :key="option.value"
           @click="$emit('update:viewMode', option.value)"
+          :aria-label="`Switch to ${option.value} view`"
+          :aria-pressed="viewMode === option.value"
           :class="[
             'rounded-md p-1.5 transition-colors sm:p-2',
             viewMode === option.value
@@ -144,6 +148,7 @@
 
       <button
         @click="$emit('openFilter')"
+        aria-label="Open filters"
         class="btn-primary relative flex h-9 w-9 items-center justify-center p-0 lg:hidden">
         <SlidersHorizontal :size="18" />
         <span

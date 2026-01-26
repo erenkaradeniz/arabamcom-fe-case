@@ -5,7 +5,7 @@
   import AdvertSimilar from '@/components/advert/detail/AdvertSimilar.vue'
   import AdvertSpecs from '@/components/advert/detail/AdvertSpecs.vue'
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
-  import { useAdvertDetail, useAppNavigation, useElementVisibility } from '@/composables'
+  import { useAdvertDetail, useAppNavigation, useElementVisibility, useScroll } from '@/composables'
   import { useTitle } from '@vueuse/core'
   import { ArrowLeft, ChevronRight, ShieldCheck } from 'lucide-vue-next'
   import { computed, ref } from 'vue'
@@ -14,6 +14,7 @@
 
   const { t } = useI18n()
   const route = useRoute()
+  const { scrollToElement } = useScroll()
   const advertId = computed(() => Number(route.params.id))
   const isPhoneRevealed = ref(false)
   const sellerCardRef = ref<HTMLElement | null>(null)
@@ -26,12 +27,17 @@
 
   const { goBack, returnToHome } = useAppNavigation()
 
+  const similarAdvertsCount = ref(0)
   const similarRef = ref<InstanceType<typeof AdvertSimilar> | null>(null)
 
   const scrollToSimilar = () => {
-    if (similarRef.value?.$el) {
-      similarRef.value.$el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (similarAdvertsCount.value > 0) {
+      scrollToElement(similarRef.value?.$el, 'center')
     }
+  }
+
+  const handleSimilarLoaded = (count: number) => {
+    similarAdvertsCount.value = count
   }
 </script>
 
@@ -63,7 +69,12 @@
         <a href="/" @click.prevent="returnToHome" class="breadcrumb-link">{{ t('nav.home') }}</a>
         <ChevronRight :size="14" />
         <span
-          class="max-w-[200px] cursor-pointer truncate font-medium text-gray-900 transition-colors hover:text-red-600 dark:text-gray-200 dark:hover:text-red-400"
+          class="max-w-[200px] truncate font-medium transition-colors"
+          :class="[
+            similarAdvertsCount > 0
+              ? 'cursor-pointer text-gray-900 hover:text-red-600 dark:text-gray-200 dark:hover:text-red-400'
+              : 'cursor-default text-gray-500 dark:text-gray-400',
+          ]"
           :title="advert.category.name"
           @click="scrollToSimilar">
           {{ advert.category.name }}
@@ -122,7 +133,8 @@
       <AdvertSimilar
         ref="similarRef"
         :category-id="advert.category.id"
-        :current-advert-id="advert.id" />
+        :current-advert-id="advert.id"
+        @loaded="handleSimilarLoaded" />
 
       <div class="h-20 lg:hidden"></div>
     </div>
