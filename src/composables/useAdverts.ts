@@ -1,7 +1,7 @@
-import { useQuery, useInfiniteQuery, keepPreviousData } from '@tanstack/vue-query'
-import { unref, type Ref, type MaybeRef } from 'vue'
 import advertService from '@/services/advertService'
 import type { AdvertQueryParams } from '@/types'
+import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/vue-query'
+import { unref, type MaybeRef, type Ref } from 'vue'
 
 export function useAdvertListInfinite(params: Ref<AdvertQueryParams>, enabled: Ref<boolean>) {
   return useInfiniteQuery({
@@ -43,5 +43,24 @@ export function useAdvertDetail(id: MaybeRef<number | null | undefined>) {
     queryFn: () => advertService.getAdvertDetail(unref(id)!),
     enabled: () => !!unref(id),
     staleTime: 1000 * 60 * 30,
+  })
+}
+
+export function useSimilarAdverts(
+  categoryId: MaybeRef<number | null | undefined>,
+  excludeId: MaybeRef<number | null | undefined>
+) {
+  return useQuery({
+    queryKey: ['similar-adverts', categoryId],
+    queryFn: async () => {
+      const response = await advertService.getAdverts({
+        categoryId: unref(categoryId)!,
+        take: 10,
+      })
+      const currentId = unref(excludeId)
+      return response.filter((a) => a.id !== currentId)
+    },
+    enabled: () => !!unref(categoryId),
+    staleTime: 1000 * 60 * 5,
   })
 }

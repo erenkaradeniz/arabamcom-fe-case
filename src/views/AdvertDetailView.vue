@@ -6,12 +6,13 @@
   import BaseSkeleton from '@/components/ui/BaseSkeleton.vue'
   import {
     useAdvertDetail,
+    useAdvertDisplay,
     useAppNavigation,
     useElementVisibility,
     useGallery,
+    useSimilarAdverts,
   } from '@/composables'
-  import advertService from '@/services/advertService'
-  import { PhotoSizes, type AdvertListItem, type PhotoSizeType } from '@/types'
+  import { PhotoSizes, type PhotoSizeType } from '@/types'
   import { getAdvertImage } from '@/utils/image'
   import { useTitle } from '@vueuse/core'
   import {
@@ -28,7 +29,7 @@
     ShieldCheck,
     X,
   } from 'lucide-vue-next'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
 
@@ -60,17 +61,7 @@
 
   const preferredLightboxSize = ref<PhotoSizeType>(PhotoSizes.Full)
 
-  const propertiesMap = computed(() => {
-    const map = new Map<string, string>()
-    if (advert.value?.properties) {
-      for (const p of advert.value.properties) {
-        map.set(p.name, p.value)
-      }
-    }
-    return map
-  })
-
-  const getProperty = (name: string) => propertiesMap.value.get(name)
+  const { getProperty } = useAdvertDisplay(advert)
 
   const specifications = computed(() => {
     if (!advert.value) return []
@@ -116,35 +107,17 @@
 
   const { goBack, returnToHome } = useAppNavigation()
 
-  const similarAdverts = ref<AdvertListItem[]>([])
-  const isSimilarLoading = ref(false)
-
-  watch(
-    () => ({ id: advert.value?.id, categoryId: advert.value?.category?.id }),
-    async ({ id, categoryId }) => {
-      if (!categoryId || !id) return
-
-      try {
-        isSimilarLoading.value = true
-        const response = await advertService.getAdverts({
-          categoryId: categoryId,
-          take: 10,
-        })
-        similarAdverts.value = response.filter((a: AdvertListItem) => a.id !== id)
-      } catch (e) {
-        console.error('Failed to fetch similar adverts', e)
-      } finally {
-        isSimilarLoading.value = false
-      }
-    },
-    { immediate: true }
+  const categoryId = computed(() => advert.value?.category?.id)
+  const { data: similarAdverts, isLoading: isSimilarLoading } = useSimilarAdverts(
+    categoryId,
+    advertId
   )
 
   const similarAdvertsScrollRef = ref<HTMLElement | null>(null)
   const similarAdvertsContainerRef = ref<HTMLElement | null>(null)
 
   const scrollToSimilar = () => {
-    if (similarAdverts.value.length > 0 && similarAdvertsContainerRef.value) {
+    if ((similarAdverts.value?.length ?? 0) > 0 && similarAdvertsContainerRef.value) {
       similarAdvertsContainerRef.value.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
@@ -188,7 +161,8 @@
         <span
           class="max-w-[200px] truncate font-medium text-gray-900 transition-colors dark:text-gray-200"
           :class="{
-            'cursor-pointer hover:text-red-600 dark:hover:text-red-400': similarAdverts.length > 0,
+            'cursor-pointer hover:text-red-600 dark:hover:text-red-400':
+              (similarAdverts?.length ?? 0) > 0,
           }"
           :title="advert.category.name"
           @click="scrollToSimilar">
@@ -324,7 +298,7 @@
         v-model:phone-revealed="isPhoneRevealed" />
 
       <div
-        v-if="isSimilarLoading || similarAdverts.length > 0"
+        v-if="isSimilarLoading || (similarAdverts?.length ?? 0) > 0"
         ref="similarAdvertsContainerRef"
         class="mt-8 lg:mt-12">
         <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
